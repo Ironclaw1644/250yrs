@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Icon } from "@/components/Icon";
-import { brand } from "@/lib/brand";
 
 export const metadata: Metadata = {
   title: "Advertise Your Business",
@@ -30,9 +29,7 @@ const ADDONS = [
   { icon: "share-nodes", title: "Promo emails", body: "Email customers who saved you." },
 ];
 
-const startHref = `mailto:${brand.email}?subject=${encodeURIComponent(
-  "I'd like to advertise my business",
-)}`;
+const startHref = "/dashboard/new";
 
 export default function AdvertisePage() {
   return (

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SearchBar } from "./SearchBar";
 import { Icon } from "./Icon";
+import { HeaderAuth } from "./HeaderAuth";
 import { brand } from "@/lib/brand";
 
 export function SiteHeader() {
@@ -21,6 +22,7 @@ export function SiteHeader() {
           >
             Browse
           </Link>
+          <HeaderAuth />
           <Link href="/advertise" className="btn btn-gold !min-h-10 px-4 text-small">
             <Icon name="bullhorn" /> Advertise
           </Link>
