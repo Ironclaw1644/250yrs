@@ -1,0 +1,100 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import {
+  faDrumstickBite,
+  faUtensils,
+  faFish,
+  faBasketShopping,
+  faTruck,
+  faScissors,
+  faUserTie,
+  faCar,
+  faSoap,
+  faShirt,
+  faScrewdriverWrench,
+  faWandMagicSparkles,
+  faBreadSlice,
+  faStore,
+  faPhone,
+  faLocationDot,
+  faHeart,
+  faShareNodes,
+  faStar,
+  faStarHalfStroke,
+  faBagShopping,
+  faCalendarCheck,
+  faMagnifyingGlass,
+  faTag,
+  faComment,
+  faCircleCheck,
+  faClock,
+  faCircleXmark,
+  faChevronRight,
+  faArrowRight,
+  faBullhorn,
+  faLocationCrosshairs,
+  faCircleInfo,
+  faGaugeHigh,
+  faRightToBracket,
+} from "@fortawesome/free-solid-svg-icons";
+
+const REGISTRY: Record<string, IconDefinition> = {
+  "drumstick-bite": faDrumstickBite,
+  utensils: faUtensils,
+  fish: faFish,
+  "basket-shopping": faBasketShopping,
+  truck: faTruck,
+  scissors: faScissors,
+  "user-tie": faUserTie,
+  car: faCar,
+  soap: faSoap,
+  shirt: faShirt,
+  "screwdriver-wrench": faScrewdriverWrench,
+  "wand-magic-sparkles": faWandMagicSparkles,
+  "bread-slice": faBreadSlice,
+  store: faStore,
+  phone: faPhone,
+  "location-dot": faLocationDot,
+  "location-crosshairs": faLocationCrosshairs,
+  heart: faHeart,
+  "share-nodes": faShareNodes,
+  star: faStar,
+  "star-half-stroke": faStarHalfStroke,
+  "bag-shopping": faBagShopping,
+  "calendar-check": faCalendarCheck,
+  "magnifying-glass": faMagnifyingGlass,
+  tag: faTag,
+  comment: faComment,
+  "circle-check": faCircleCheck,
+  clock: faClock,
+  "circle-xmark": faCircleXmark,
+  "chevron-right": faChevronRight,
+  "arrow-right": faArrowRight,
+  bullhorn: faBullhorn,
+  "circle-info": faCircleInfo,
+  "gauge-high": faGaugeHigh,
+  "right-to-bracket": faRightToBracket,
+};
+
+/**
+ * Font Awesome (Free Solid) icon — NEVER emoji.
+ * Accepts a name with or without the `fa-`/`fa-solid ` prefix.
+ */
+export function Icon({
+  name,
+  className,
+  fixedWidth,
+}: {
+  name: string;
+  className?: string;
+  fixedWidth?: boolean;
+}) {
+  const key = name.replace(/^fa-(solid|regular|brands)\s+/, "").replace(/^fa-/, "").trim();
+  return (
+    <FontAwesomeIcon
+      icon={REGISTRY[key] ?? faStore}
+      className={className}
+      fixedWidth={fixedWidth}
+    />
+  );
+}

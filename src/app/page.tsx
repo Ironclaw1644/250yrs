@@ -1,268 +1,144 @@
-import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
+import { brand, CATEGORIES } from "@/lib/brand";
+import { Icon } from "@/components/Icon";
+import { SearchBar } from "@/components/SearchBar";
+import { CategoryTile } from "@/components/CategoryTile";
 
-import { FoundersIntakeForm } from "@/components/founders-intake-form";
-import { ProductCard } from "@/components/product-card";
-import { SectionHeading } from "@/components/section-heading";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
-import { brand } from "@/lib/brand";
-import { campaignGallery, campaignImages } from "@/lib/campaign-images";
-import { featuredProducts } from "@/lib/products";
-import { absoluteUrl, defaultOgImage, siteName } from "@/lib/seo";
+const CHIPS = [
+  { icon: "magnifying-glass", label: "Search Nearby", tone: "gold" },
+  { icon: "tag", label: "Exclusive Deals", tone: "barn" },
+  { icon: "heart", label: "Save Favorites", tone: "gold" },
+  { icon: "comment", label: "Leave Reviews", tone: "gold" },
+  { icon: "phone", label: "Call Now", tone: "barn" },
+];
 
-const homepageTitle = "True American Wear | 250th Year Collection";
-const homepageDescription =
-  "Shop premium patriotic apparel from True American Wear, including heritage-inspired shirts, crewnecks, hoodies, and bundle sets celebrating America’s 250th anniversary.";
+const STEPS = [
+  { icon: "location-crosshairs", title: "Choose your area", body: "Pick your country, state, and city — or just search what you need." },
+  { icon: "store", title: "Find real local shops", body: "Browse fried food, barbers, tire shops, markets, and more — with photos, hours, and prices." },
+  { icon: "phone", title: "Call, order, or book", body: "Tap to call, get directions, grab a coupon, order food, or book an appointment." },
+];
 
-export const metadata: Metadata = {
-  title: {
-    absolute: homepageTitle,
-  },
-  description: homepageDescription,
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    title: homepageTitle,
-    description: homepageDescription,
-    url: "/",
-    siteName,
-    locale: "en_US",
-    type: "website",
-    images: [defaultOgImage],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: homepageTitle,
-    description: homepageDescription,
-    images: [defaultOgImage.url],
-  },
-};
-
-export default function Home() {
-  const campaignSpotlight = campaignGallery[0];
-  const campaignCards = campaignGallery.slice(1);
-  const webPageJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: `${siteName} Homepage`,
-    url: absoluteUrl("/"),
-    description: homepageDescription,
-    isPartOf: {
-      "@type": "WebSite",
-      name: siteName,
-      url: absoluteUrl("/"),
-    },
-  };
-
+export default function HomePage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(webPageJsonLd) }}
-      />
-      <SiteHeader />
-
-      <main className="pb-16 sm:pb-20">
-        <section className="container-shell pt-8 sm:pt-10">
-          <div className="grid gap-6 lg:grid-cols-[1.02fr_0.98fr] lg:items-stretch lg:gap-8">
-            <div className="section-shell flex flex-col justify-between overflow-hidden">
-              <div className="space-y-5">
-                <p className="eyebrow">250th Year Collection</p>
-                <div className="space-y-3 sm:space-y-4">
-                  <h1 className="font-display text-5xl leading-[0.92] text-brand-cream sm:text-7xl xl:text-[5.5rem]">
-                    True American Wear
-                  </h1>
-                  <p className="max-w-2xl text-base leading-7 text-white/74 sm:text-xl sm:leading-8">
-                    Built for the 250th year. Patriotic American apparel made to celebrate America’s 250th anniversary.
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-3">
-                  <Link href="/shop" className="button-primary">
-                    Shop the 250th Year Collection
-                  </Link>
-                  <Link href="#founders-intake" className="button-secondary">
-                    Join the list
-                  </Link>
-                </div>
-              </div>
-
-              <div className="mt-8 grid gap-3 border-t border-white/8 pt-5 sm:grid-cols-3">
-                {[
-                  "Heavyweight fleece with a structured fit and clean finish.",
-                  "Built for cool nights, early mornings, and everyday wear.",
-                  "Pairs easy with denim, boots, or a work jacket.",
-                ].map((line) => (
-                  <p key={line} className="text-sm leading-6 text-white/60">
-                    {line}
-                  </p>
-                ))}
-              </div>
-            </div>
-
-            <div className="section-shell relative min-h-[500px] overflow-hidden p-0 sm:min-h-[540px]">
-              <div className="absolute inset-0 overflow-hidden">
-                <Image
-                  src={campaignImages.foundersLifestyleB}
-                  alt="Woman wearing the Founders 1776 Crewneck walking down the road at sunset"
-                  fill
-                  priority
-                  quality={94}
-                  sizes="(min-width: 1280px) 44vw, (min-width: 1024px) 48vw, 100vw"
-                  className="object-cover object-center opacity-80"
-                />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,11,12,0.16)_0%,rgba(11,11,12,0.28)_34%,rgba(11,11,12,0.84)_100%)]" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(236,228,214,0.08),transparent_34%)]" />
-              </div>
-
-              <div className="relative flex h-full items-end p-5 sm:p-6 lg:p-8">
-                <div className="max-w-lg space-y-4 rounded-[1.2rem] border border-white/10 bg-brand-obsidian/58 p-5 shadow-[0_24px_60px_rgba(0,0,0,0.38)] backdrop-blur-md sm:p-6">
-                  <p className="eyebrow">250th Year Collection</p>
-                  <h2 className="font-display text-4xl text-brand-cream sm:text-5xl">
-                    Heavy fleece, dusk light, open road.
-                  </h2>
-                  <p className="max-w-xl text-base leading-7 text-white/72">
-                    Patriotic apparel built to celebrate 250 years.
-                  </p>
-                </div>
-              </div>
-            </div>
+      {/* ===== HERO ===== */}
+      <section className="paper-grain relative overflow-hidden">
+        <div
+          className="pointer-events-none absolute inset-x-0 top-[-10%] mx-auto h-[420px] max-w-4xl rounded-full opacity-60 blur-3xl"
+          style={{ background: "radial-gradient(closest-side, rgba(240,168,24,0.22), transparent)" }}
+        />
+        <div className="container-shell relative py-14 text-center sm:py-20">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={brand.logo}
+            alt={brand.name}
+            className="reveal mx-auto w-full max-w-lg animate-sign-sway drop-shadow-[0_20px_45px_rgba(6,18,29,0.28)]"
+            style={{ "--i": 0 } as React.CSSProperties}
+          />
+          <p
+            className="reveal mx-auto mt-7 max-w-2xl font-heading text-lead font-medium uppercase tracking-wide text-navy sm:text-h3"
+            style={{ "--i": 1 } as React.CSSProperties}
+          >
+            {brand.slogan}
+          </p>
+          <div
+            className="reveal mx-auto mt-8 max-w-2xl"
+            style={{ "--i": 2 } as React.CSSProperties}
+          >
+            <SearchBar size="lg" />
           </div>
-        </section>
 
-        <section className="container-shell pt-8 sm:pt-10">
-          <div className="grid gap-6 lg:grid-cols-[0.74fr_1.26fr] lg:gap-8">
-            <div className="section-shell relative min-h-[240px] overflow-hidden">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(199,164,106,0.2),transparent_38%),linear-gradient(180deg,#1a1b1d_0%,#0b0b0c_100%)]" />
-              <div className="relative flex h-full items-center justify-center p-4 sm:p-5">
-                <div className="relative h-60 w-full max-w-[18rem] sm:h-72 sm:max-w-[20rem]">
-                  <Image
-                    src="/true-american-wear/logo.png"
-                    alt="True American Wear crest"
-                    fill
-                    sizes="(min-width: 640px) 320px, 288px"
-                    className="scale-[1.22] object-contain drop-shadow-[0_18px_44px_rgba(0,0,0,0.55)] sm:scale-[1.26]"
-                  />
-                </div>
-              </div>
+          {/* Action chips (from the logo mockup) */}
+          <ul
+            className="reveal mx-auto mt-10 flex max-w-3xl flex-wrap items-start justify-center gap-x-8 gap-y-6"
+            style={{ "--i": 3 } as React.CSSProperties}
+          >
+            {CHIPS.map((c) => (
+              <li key={c.label} className="flex w-20 flex-col items-center gap-2 text-center">
+                <span className="grid h-14 w-14 place-items-center rounded-full bg-navy shadow-card">
+                  <Icon name={c.icon} className={c.tone === "barn" ? "text-lg text-barn" : "text-lg text-gold"} />
+                </span>
+                <span className="font-heading text-xs font-semibold uppercase leading-tight tracking-wide text-navy">
+                  {c.label}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ===== CATEGORIES ===== */}
+      <section className="container-shell py-14 sm:py-20">
+        <div className="mb-8 text-center">
+          <p className="eyebrow">Browse by category</p>
+          <h2 className="mt-1 font-heading text-h1 text-navy">What are you looking for?</h2>
+        </div>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {CATEGORIES.map((c, i) => (
+            <div key={c.slug} className="reveal" style={{ "--i": i } as React.CSSProperties}>
+              <CategoryTile category={c} href={`/categories/${c.slug}`} />
             </div>
+          ))}
+        </div>
+      </section>
 
-            <div className="section-shell grid gap-6 sm:grid-cols-[0.9fr_1.1fr] sm:items-center p-4 sm:p-5 lg:p-6">
-              <div className="space-y-4 px-2 sm:px-3 lg:px-4">
-                <p className="eyebrow">The crest</p>
-                <h3 className="font-display text-3xl text-brand-cream sm:text-4xl">
-                  {brand.tagline}
+      {/* ===== HOW IT WORKS ===== */}
+      <section className="bg-linen/60">
+        <div className="container-shell py-14 sm:py-20">
+          <div className="mb-10 text-center">
+            <p className="eyebrow">How it works</p>
+            <h2 className="mt-1 font-heading text-h1 text-navy">Local, in three taps</h2>
+          </div>
+          <ol className="grid gap-8 md:grid-cols-3">
+            {STEPS.map((s, i) => (
+              <li key={s.title} className="text-center">
+                <span className="pin-badge mx-auto h-16 w-16">
+                  <Icon name={s.icon} className="text-2xl" />
+                </span>
+                <h3 className="mt-4 font-heading text-h3 text-navy">
+                  {i + 1}. {s.title}
                 </h3>
-                <p className="text-sm leading-7 text-white/68 sm:text-base">
-                  {brand.description} Built with durable materials, clean lines,
-                  and a classic American feel.
-                </p>
-              </div>
-              <div className="relative min-h-[312px] overflow-hidden rounded-[1rem] border border-white/8">
-                <Image
-                  src={campaignImages.heroCouple}
-                  alt="Founders crewneck and Redline shirt lifestyle couple image"
-                  fill
-                  quality={92}
-                  sizes="(min-width: 1024px) 40vw, 100vw"
-                  className="object-cover object-[center_34%]"
-                />
-              </div>
-            </div>
+                <p className="mx-auto mt-2 max-w-xs text-stone">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ===== FEATURED AREA ===== */}
+      <section className="container-shell py-14 sm:py-20">
+        <div className="card flex flex-col items-start gap-4 p-8 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="eyebrow">Now serving</p>
+            <h2 className="mt-1 font-heading text-h2 text-navy">Berea, Kentucky</h2>
+            <p className="mt-2 max-w-xl text-stone">
+              Fried fish, fresh fades, and fast tire service — see what&apos;s open near you in Berea.
+            </p>
           </div>
-        </section>
+          <Link href="/us/kentucky/berea" className="btn btn-primary shrink-0">
+            <Icon name="location-dot" /> Explore Berea
+          </Link>
+        </div>
+      </section>
 
-        <section id="collection" className="container-shell pt-8 sm:pt-10">
-          <div className="space-y-8">
-            <SectionHeading
-              eyebrow="Featured collection"
-              title="The 250th Year Collection is defined by its strongest pieces."
-              description="Start with the Founders Crewneck, layer in the Eagle Hoodie, and finish with the Redline Shirt for warmer days."
-            />
-
-            <div className="grid gap-6">
-              {featuredProducts.map((product) => (
-                <ProductCard
-                  key={product.slug}
-                  product={product}
-                  interactiveImage={false}
-                  imageSizes="(min-width: 1280px) 28vw, (min-width: 1024px) 34vw, 100vw"
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section id="founders-intake" className="container-shell pt-6 sm:pt-8">
-          <FoundersIntakeForm description="Join the list for first access, release dates, and the first word on what lands next." />
-        </section>
-
-        <section className="container-shell pt-8 sm:pt-10">
-          <div className="section-shell space-y-8 p-4 sm:space-y-9 sm:p-5 lg:p-6">
-            <SectionHeading
-              eyebrow="The campaign"
-              title="Open road. End of day. Built to wear anywhere."
-              description="Made for real wear — in denim, on the road, and long after the holiday ends."
-            />
-
-            <div className="grid gap-6 xl:grid-cols-[1.14fr_0.86fr]">
-              <div className="overflow-hidden rounded-[1rem] border border-white/8 bg-white/[0.03]">
-                <div className="relative min-h-[420px] overflow-hidden md:min-h-[500px]">
-                  <Image
-                    src={campaignSpotlight.image}
-                    alt={campaignSpotlight.title}
-                    fill
-                    quality={94}
-                    sizes="(min-width: 1280px) 52vw, (min-width: 1024px) 60vw, 100vw"
-                    className={campaignSpotlight.imageClassName}
-                  />
-                </div>
-                <div className="space-y-3 p-6">
-                  <p className="eyebrow">Campaign spotlight</p>
-                  <h3 className="font-display text-3xl text-brand-cream sm:text-4xl">
-                    {campaignSpotlight.title}
-                  </h3>
-                  <p className="max-w-2xl text-sm leading-7 text-white/66 sm:text-base">
-                    {campaignSpotlight.copy}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-1">
-                {campaignCards.map((frame) => (
-                  <div
-                    key={frame.title}
-                    className="overflow-hidden rounded-[1rem] border border-white/8 bg-white/[0.03]"
-                  >
-                    <div className="relative min-h-[320px] overflow-hidden md:min-h-[360px] xl:min-h-[330px]">
-                      <Image
-                        src={frame.image}
-                        alt={frame.title}
-                        fill
-                        quality={92}
-                        sizes="(min-width: 1280px) 30vw, (min-width: 768px) 33vw, 100vw"
-                        className={frame.imageClassName}
-                      />
-                    </div>
-                    <div className="space-y-2 p-5">
-                      <p className="eyebrow">True American Wear</p>
-                      <h3 className="font-display text-2xl text-brand-cream">
-                        {frame.title}
-                      </h3>
-                      <p className="text-sm leading-6 text-white/64">{frame.copy}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <SiteFooter />
+      {/* ===== ADVERTISER CTA ===== */}
+      <section className="container-shell pb-20">
+        <div className="sign-plate flex flex-col items-center gap-6 px-6 py-12 text-center sm:px-12">
+          <span className="pin-badge h-16 w-16">
+            <Icon name="bullhorn" className="text-2xl" />
+          </span>
+          <h2 className="stamp text-3xl text-cream sm:text-4xl">OWN A LOCAL BUSINESS?</h2>
+          <p className="max-w-xl text-cream/85">
+            Get found by customers in your city and around the world. Advertise for
+            just <strong className="text-gold">$19.99/month</strong> or{" "}
+            <strong className="text-gold">$100/year</strong> — photos, hours, menu,
+            reviews, coupons, and local search placement included.
+          </p>
+          <Link href="/advertise" className="btn btn-gold">
+            <Icon name="arrow-right" /> Advertise your business
+          </Link>
+        </div>
+      </section>
     </>
   );
 }

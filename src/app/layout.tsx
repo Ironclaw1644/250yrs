@@ -1,96 +1,86 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Geist, Geist_Mono } from "next/font/google";
+import { Alfa_Slab_One, Oswald, Public_Sans, Spline_Sans_Mono } from "next/font/google";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 import "./globals.css";
 
-import {
-  defaultDescription,
-  defaultKeywords,
-  defaultOgImage,
-  organizationJsonLd,
-  siteName,
-  siteUrl,
-  websiteJsonLd,
-} from "@/lib/seo";
+import { brand, siteUrl } from "@/lib/brand";
+import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
+import { JsonLd } from "@/components/JsonLd";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// We import the FA stylesheet ourselves; stop it auto-injecting a second copy.
+config.autoAddCss = false;
+
+const display = Alfa_Slab_One({
+  weight: "400",
   subsets: ["latin"],
+  variable: "--font-display",
+  display: "swap",
 });
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const heading = Oswald({
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
+  variable: "--font-heading",
+  display: "swap",
 });
-
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
+const body = Public_Sans({
+  weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  variable: "--font-body",
+  display: "swap",
+});
+const mono = Spline_Sans_Mono({
+  weight: ["400", "500", "600"],
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: siteName,
-    template: "%s | True American Wear",
+    default: `${brand.name} — Find the Real Local Stores`,
+    template: `%s | ${brand.name}`,
   },
-  description: defaultDescription,
-  keywords: defaultKeywords,
-  alternates: {
-    canonical: "/",
-  },
+  description: brand.shortPitch,
+  alternates: { canonical: "/" },
+  icons: { icon: "/brand/favicon.png", apple: "/brand/favicon.png" },
   openGraph: {
-    title: siteName,
-    description: defaultDescription,
+    title: brand.name,
+    description: brand.shortPitch,
     url: siteUrl,
-    siteName,
+    siteName: brand.name,
     locale: "en_US",
     type: "website",
-    images: [defaultOgImage],
+    images: [{ url: "/brand/logo.png", width: 1024, height: 1024, alt: brand.name }],
   },
   twitter: {
     card: "summary_large_image",
-    title: siteName,
-    description: defaultDescription,
-    images: [defaultOgImage.url],
+    title: brand.name,
+    description: brand.shortPitch,
+    images: ["/brand/logo.png"],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
-  },
-  icons: {
-    icon: [{ url: "/favicon.ico" }],
-    shortcut: ["/favicon.ico"],
-    apple: [{ url: "/favicon.ico" }],
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable} antialiased`}
+        className={`${display.variable} ${heading.variable} ${body.variable} ${mono.variable}`}
       >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
-        {children}
+        <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader />
+          <main className="flex-1">{children}</main>
+          <SiteFooter />
+        </div>
       </body>
     </html>
   );

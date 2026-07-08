@@ -1,80 +1,71 @@
 /* =============================================================================
    True American Where — globals.css  ("Main Street Modern")
-   Colors + type sampled from the client logos (public/brand/*.png).
-   Fonts are loaded with next/font (src/app/layout.tsx) and exposed as the CSS
-   variables --font-display / --font-heading / --font-body / --font-mono.
+   Colors + type sampled from the client logos (public/brand/*.png):
+     navy #0C2135 · marigold gold #F0A818 · cream #F5EDDA · barn red #B23A2E.
+   Type echoes the logo's heavy vintage slab lettering:
+     Alfa Slab One (display / hero stamps) · Oswald (headings, nav, UI chrome)
+     · Public Sans (body — U.S. federal typeface) · Spline Sans Mono (prices).
+   With Next.js prefer next/font and set the same CSS variable names:
+     --font-display, --font-heading, --font-body, --font-mono
+   The @import below is the no-build fallback.
    ============================================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Oswald:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ----------------------------------------------------------------------------
+   TOKENS  (single source of truth — mirrored in 03-tailwind-tokens.ts)
+---------------------------------------------------------------------------- */
 :root {
-  /* next/font fills these; fallbacks keep var() valid if a font fails */
+  /* next/font fallbacks so var() works even without next/font wiring */
   --font-display: "Alfa Slab One", Rockwell, Georgia, serif;
   --font-heading: "Oswald", system-ui, sans-serif;
   --font-body: "Public Sans", system-ui, sans-serif;
   --font-mono: "Spline Sans Mono", ui-monospace, monospace;
 
   /* Core brand — sampled from the logo */
-  --navy: #0c2135;
-  --navy-deep: #06121d;
-  --navy-mid: #123049;
-  --gold: #f0a818;
-  --gold-deep: #ce860c;
-  --gold-hi: #f7c24a;
-  --barn: #b23a2e;
+  --navy: #0c2135; /* sign-plate navy */
+  --navy-deep: #06121d; /* deepest / footer / admin canvas */
+  --navy-mid: #123049; /* raised navy panels */
+  --gold: #f0a818; /* marigold */
+  --gold-deep: #ce860c; /* hover / pressed */
+  --gold-hi: #f7c24a; /* highlight / focus glow */
+  --barn: #b23a2e; /* barn red — CTAs, alerts, "Call Now" */
   --barn-deep: #8e2b22;
+
+  /* `ink` aliases kept for spec compatibility */
   --ink: var(--navy);
   --ink-deep: var(--navy-deep);
 
   /* Light (front end) surfaces */
-  --paper: #f5edda;
-  --paper-raised: #fbf6e9;
-  --cream: #f2e7be;
-  --linen: #ece1c6;
-  --char: #1a1712;
-  --stone: #6e675a;
+  --paper: #f5edda; /* warm cream page */
+  --paper-raised: #fbf6e9; /* cards */
+  --cream: #f2e7be; /* ivory — on-navy text / signage letters */
+  --linen: #ece1c6; /* fills / table stripes / inputs */
+  --char: #1a1712; /* warm near-black body text */
+  --stone: #6e675a; /* muted / secondary text */
 
-  /* Dark (admin) surfaces */
+  /* Dark (admin) surfaces — same palette, navy canvas */
   --night: var(--navy-deep);
-  --slate-1: #102338;
-  --slate-2: #17304b;
-  --hairline: #24405c;
-  --mist: #a8b6c8;
-  --cloud: #e9eff6;
+  --slate-1: #102338; /* cards / panels */
+  --slate-2: #17304b; /* raised rows / hover */
+  --hairline: #24405c; /* borders / dividers on dark */
+  --mist: #a8b6c8; /* secondary text on dark */
+  --cloud: #e9eff6; /* primary text on dark */
 
-  /* Semantic */
-  --success: #2e7d5b;
-  --warning: var(--gold);
-  --danger: var(--barn);
-  --info: #1f4c74;
+  /* Semantic (shared) */
+  --success: #2e7d5b; /* muted pine — "open now" / paid / approved */
+  --warning: var(--gold); /* pending / needs review */
+  --danger: var(--barn); /* closed / rejected / delete */
+  --info: #1f4c74; /* neutral notices */
 
-  /* RGB channels so Tailwind alpha modifiers work: rgb(var(--x-rgb)/<alpha>) */
-  --navy-rgb: 12 33 53;
-  --navy-deep-rgb: 6 18 29;
-  --navy-mid-rgb: 18 48 73;
-  --gold-rgb: 240 168 24;
-  --gold-deep-rgb: 206 134 12;
-  --gold-hi-rgb: 247 194 74;
-  --barn-rgb: 178 58 46;
-  --barn-deep-rgb: 142 43 34;
-  --paper-rgb: 245 237 218;
-  --paper-raised-rgb: 251 246 233;
-  --cream-rgb: 242 231 190;
-  --linen-rgb: 236 225 198;
-  --char-rgb: 26 23 18;
-  --stone-rgb: 110 103 90;
-  --slate-1-rgb: 16 35 56;
-  --slate-2-rgb: 23 48 75;
-  --hairline-rgb: 36 64 92;
-  --mist-rgb: 168 182 200;
-  --cloud-rgb: 233 239 246;
-  --success-rgb: 46 125 91;
-  --info-rgb: 31 76 116;
-
+  /* Motion */
   --ease-warm: cubic-bezier(0.22, 0.61, 0.36, 1);
 
+  /* Textures */
   --tex-halftone: radial-gradient(rgba(12, 33, 53, 0.06) 1px, transparent 1.4px);
   --tex-star: radial-gradient(
     circle at center,
@@ -85,17 +76,23 @@
   color-scheme: light;
 }
 
+/* Admin / any dark region opts in with .theme-dark */
 .theme-dark {
   color-scheme: dark;
 }
 
+/* ----------------------------------------------------------------------------
+   BASE
+---------------------------------------------------------------------------- */
 @layer base {
   * {
     box-sizing: border-box;
   }
+
   html {
     scroll-behavior: smooth;
   }
+
   body {
     margin: 0;
     min-height: 100vh;
@@ -107,11 +104,15 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
+
+  /* Dark grounding for admin — same tokens, dark canvas */
   .theme-dark body,
   body.theme-dark {
     background-color: var(--night);
     color: var(--cloud);
   }
+
+  /* Structural headings = condensed Oswald (the logo's condensed voice) */
   h1,
   h2,
   h3,
@@ -129,52 +130,69 @@
   .theme-dark h4 {
     color: var(--cloud);
   }
+
   p {
     text-wrap: pretty;
   }
+
   a {
     color: var(--navy);
-    text-decoration: none;
+    text-decoration: underline;
+    text-decoration-color: var(--gold);
+    text-underline-offset: 2px;
+    text-decoration-thickness: 2px;
   }
   a:hover {
     color: var(--barn);
   }
+
+  /* Tabular figures for prices / analytics */
   .tabular,
   code,
   .mono {
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
   }
+
+  /* Accessible focus everywhere */
   :where(a, button, input, select, textarea, [tabindex]):focus-visible {
     outline: none;
     box-shadow: 0 0 0 4px rgba(240, 168, 24, 0.4);
     border-radius: 6px;
   }
+
   ::selection {
     background: var(--gold-hi);
     color: var(--navy-deep);
   }
 }
 
+/* ----------------------------------------------------------------------------
+   SIGNATURE UTILITIES + COMPONENTS
+---------------------------------------------------------------------------- */
 @layer components {
   .container-shell {
-    @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
+    @apply mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-10;
   }
 
+  /* Heavy vintage slab — hero words + big category "stamp" headlines */
   .display,
   .stamp {
     font-family: var(--font-display);
-    font-weight: 400;
+    font-weight: 400; /* Alfa Slab One ships a single heavy weight */
     letter-spacing: 0.005em;
     line-height: 0.98;
   }
 
+  /* Warm paper grain so cream never looks like a flat hex */
   .paper-grain {
+    position: relative;
     background-color: var(--paper);
     background-image: var(--tex-halftone);
     background-size: 7px 7px;
   }
 
+  /* Tracked-caps eyebrow — recurring "stamped" signature (condensed) */
   .eyebrow {
     font-family: var(--font-heading);
     font-weight: 600;
@@ -184,6 +202,7 @@
     color: var(--barn);
   }
 
+  /* Gold pinstripe keyline — the painted keyline on a vintage sign */
   .pinstripe {
     position: relative;
   }
@@ -197,10 +216,13 @@
     opacity: 0.7;
   }
 
-  /* SIGNATURE: enamel sign plate (matches logo.png) */
+  /* ===== SIGNATURE ELEMENT: Enamel Sign Plate =====
+     Painted navy porcelain sign + routed gold keyline + star texture + shadow.
+     Hero, logo lockup, section header stamps, email headers. Matches logo.png. */
   .sign-plate {
     position: relative;
     border-radius: 22px;
+    padding: 2.5rem 2.75rem;
     color: var(--cream);
     background-image: var(--tex-star),
       linear-gradient(163deg, #143253 0%, var(--navy) 48%, var(--navy-deep) 100%);
@@ -209,6 +231,7 @@
       0 18px 50px rgba(6, 18, 29, 0.4);
   }
   .sign-plate::after {
+    /* routed gold keyline inset from the edge (double-line enamel look) */
     content: "";
     position: absolute;
     inset: 9px;
@@ -223,17 +246,20 @@
     color: var(--cream);
   }
 
+  /* Hero 3D tilt wrapper (JS sets --rx/--ry from pointer; idle sway fallback) */
   .sign-plate-3d {
     transform-style: preserve-3d;
     transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
     transition: transform 240ms var(--ease-warm);
   }
 
-  /* The brand pin mark (gold "where" locator) */
+  /* ===== The brand Pin mark (the gold "where" locator) ===== */
   .pin-badge {
     position: relative;
     display: inline-grid;
     place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
     color: var(--gold);
     background: var(--navy);
     border: 2px solid var(--gold);
@@ -245,6 +271,7 @@
     transform: rotate(45deg);
   }
 
+  /* Buttons — icon + plain-language word (never a bare glyph) */
   .btn {
     @apply inline-flex items-center justify-center gap-2 rounded-md font-heading font-semibold uppercase tracking-wide;
     min-height: 44px;
@@ -262,7 +289,6 @@
   }
   .btn-primary:hover {
     background: var(--barn-deep);
-    color: var(--paper);
   }
   .btn-gold {
     background: var(--gold);
@@ -270,7 +296,6 @@
   }
   .btn-gold:hover {
     background: var(--gold-deep);
-    color: var(--navy-deep);
   }
   .btn-secondary {
     background: transparent;
@@ -282,18 +307,19 @@
     color: var(--paper);
   }
 
+  /* Front-end card */
   .card {
     @apply rounded-lg bg-paper-raised;
     box-shadow: 0 2px 4px rgba(12, 33, 53, 0.06),
       0 8px 24px rgba(12, 33, 53, 0.08);
-    transition: transform 240ms var(--ease-warm),
-      box-shadow 240ms var(--ease-warm);
+    transition: transform 240ms var(--ease-warm), box-shadow 240ms var(--ease-warm);
   }
   .card:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 40px rgba(12, 33, 53, 0.14);
   }
 
+  /* "Open now" / status pill */
   .pill {
     @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-small font-semibold;
   }
@@ -306,15 +332,18 @@
     color: var(--barn);
   }
 
+  /* Demo-listing ribbon (launch seed data — clearly flagged, never indexed) */
   .demo-ribbon {
-    @apply rounded-full px-2.5 py-0.5 font-heading text-xs font-semibold uppercase;
+    @apply absolute right-3 top-3 rounded-full px-2.5 py-0.5 font-heading text-xs font-semibold uppercase;
     background: var(--gold);
     color: var(--navy-deep);
     letter-spacing: 0.14em;
   }
 
+  /* Breadcrumb spine: USA › Kentucky › Berea › Fried Food */
   .breadcrumb a {
     color: var(--navy);
+    text-decoration: none;
     font-family: var(--font-heading);
   }
   .breadcrumb a:hover {
@@ -322,9 +351,10 @@
   }
   .breadcrumb .sep {
     color: var(--gold);
-    margin: 0 0.4rem;
+    margin: 0 0.5rem;
   }
 
+  /* Diner-menu price row: name · · · · · price */
   .leader-row {
     display: flex;
     align-items: baseline;
@@ -336,6 +366,7 @@
     transform: translateY(-3px);
   }
 
+  /* Skeleton shimmer */
   .skeleton {
     background: linear-gradient(
       90deg,
@@ -349,6 +380,7 @@
   }
 }
 
+/* Staggered page-load reveal: add .reveal and set style="--i:0..n" */
 @layer utilities {
   .reveal {
     opacity: 0;
@@ -395,7 +427,21 @@
     transform: scale(1);
   }
 }
+@keyframes pin-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-18px) scale(0.9);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(2px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
 
+/* Respect reduced motion — keep opacity, drop movement */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -411,69 +457,4 @@
   .sign-plate-3d {
     transform: none;
   }
-}
-
-/* Rendered legal/policy HTML */
-.legal-prose h1 {
-  font-family: var(--font-heading);
-  font-size: 1.75rem;
-  color: var(--navy);
-  margin: 2rem 0 0.5rem;
-}
-.legal-prose h2 {
-  font-family: var(--font-heading);
-  font-weight: 700;
-  font-size: 1.4rem;
-  color: var(--navy);
-  margin: 2.25rem 0 0.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(12, 33, 53, 0.1);
-}
-.legal-prose h3 {
-  font-family: var(--font-heading);
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: var(--navy);
-  margin: 1.25rem 0 0.35rem;
-}
-.legal-prose p {
-  margin: 0.6rem 0;
-  color: var(--char);
-}
-.legal-prose ul,
-.legal-prose ol {
-  margin: 0.6rem 0 0.6rem 1.25rem;
-  list-style: disc;
-}
-.legal-prose li {
-  margin: 0.25rem 0;
-}
-.legal-prose a {
-  color: var(--barn);
-  text-decoration: underline;
-}
-.legal-prose strong {
-  color: var(--navy);
-}
-.legal-prose hr {
-  border: 0;
-  border-top: 1px solid rgba(12, 33, 53, 0.12);
-  margin: 1.5rem 0;
-}
-.legal-prose table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1rem 0;
-  font-size: 0.9rem;
-}
-.legal-prose th,
-.legal-prose td {
-  border: 1px solid rgba(12, 33, 53, 0.15);
-  padding: 0.4rem 0.6rem;
-  text-align: left;
-}
-.legal-prose code {
-  background: var(--linen);
-  padding: 0.05rem 0.3rem;
-  border-radius: 4px;
 }
