@@ -15,8 +15,9 @@ export function SiteFooter() {
           <h4 className="eyebrow !text-gold">Explore</h4>
           <ul className="mt-3 space-y-2 text-small">
             <li><Link href="/us" className="hover:text-cloud">Browse the USA</Link></li>
-            <li><Link href="/us/kentucky/berea" className="hover:text-cloud">Berea, Kentucky</Link></li>
-            <li><Link href="/search" className="hover:text-cloud">Search nearby</Link></li>
+            <li><Link href="/how-it-works" className="hover:text-cloud">How it works</Link></li>
+            <li><Link href="/about" className="hover:text-cloud">About us</Link></li>
+            <li><Link href="/contact" className="hover:text-cloud">Contact</Link></li>
             <li><Link href="/advertise" className="hover:text-cloud">Advertise your business</Link></li>
           </ul>
         </div>
@@ -24,7 +25,11 @@ export function SiteFooter() {
           <h4 className="eyebrow !text-gold">Categories</h4>
           <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-small">
             {CATEGORIES.slice(0, 8).map((c) => (
-              <li key={c.slug} className="text-mist">{c.name}</li>
+              <li key={c.slug}>
+                <Link href={`/categories/${c.slug}`} className="hover:text-cloud">
+                  {c.name}
+                </Link>
+              </li>
             ))}
           </ul>
         </div>

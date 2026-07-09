@@ -70,6 +70,17 @@ export async function requireAdmin(): Promise<Profile> {
   return profile;
 }
 
+/**
+ * Non-redirecting admin gate for use inside server actions (a redirect() in a
+ * mutation corrupts the action response — throw instead and let callers map
+ * it to an error result).
+ */
+export async function assertAdmin(): Promise<Profile> {
+  const profile = await getProfile();
+  if (!profile || profile.role !== "admin") throw new Error("UNAUTHORIZED");
+  return profile;
+}
+
 /** Does the signed-in user own this business? (service-side check) */
 export async function ownsBusiness(businessId: string): Promise<boolean> {
   const user = await getSessionUser();

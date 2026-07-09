@@ -1,4 +1,5 @@
 import "server-only";
+import { unstable_cache } from "next/cache";
 import { db } from "./supabase";
 import type {
   Business,
@@ -13,14 +14,17 @@ import type {
   State,
 } from "./db-types";
 
-/** Wrap a query so a missing/unexposed schema degrades to null/[] instead of a 500. */
+/**
+ * Wrap a query so infra failures degrade gracefully IN PRODUCTION only.
+ * In dev we log loudly AND rethrow — silent empty-states previously hid a
+ * schema-cache outage (PGRST205) behind 404s.
+ */
 async function safe<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   try {
     return await fn();
   } catch (e) {
-    if (process.env.NODE_ENV !== "production") {
-      console.warn("[taw query]", (e as Error)?.message);
-    }
+    console.error("[taw query]", (e as Error)?.message);
+    if (process.env.NODE_ENV !== "production") throw e;
     return fallback;
   }
 }
@@ -123,20 +127,24 @@ export async function listCities(stateId: string): Promise<City[]> {
   }, []);
 }
 
+export interface BusinessWithPhotoList extends Business {
+  photos?: Pick<BusinessPhoto, "url" | "alt_text" | "is_primary" | "sort_order">[];
+}
+
 export async function listPublishedBusinesses(
   cityId: string,
   categoryId: string,
-): Promise<Business[]> {
+): Promise<BusinessWithPhotoList[]> {
   return safe(async () => {
     const { data } = await db()
       .from("businesses")
-      .select("*")
+      .select("*, photos:business_photos(url,alt_text,is_primary,sort_order)")
       .eq("city_id", cityId)
       .eq("category_id", categoryId)
       .eq("status", "published")
       .order("featured_city", { ascending: false })
       .order("rating_avg", { ascending: false });
-    return (data as Business[]) ?? [];
+    return (data as unknown as BusinessWithPhotoList[]) ?? [];
   }, []);
 }
 
@@ -260,6 +268,82 @@ export async function getVisibleReviews(
     return (data as Review[]) ?? [];
   }, []);
 }
+
+export interface BusinessWithPhotos extends BusinessFull {
+  photos?: Pick<BusinessPhoto, "url" | "alt_text" | "is_primary" | "sort_order">[];
+}
+
+/** Pick the primary photo (or first by sort order) from a joined photo list. */
+export function primaryPhoto(
+  b: BusinessWithPhotos,
+): { url: string; alt: string } | null {
+  const photos = b.photos ?? [];
+  if (!photos.length) return null;
+  const p =
+    photos.find((x) => x.is_primary) ??
+    [...photos].sort((a, z) => a.sort_order - z.sort_order)[0];
+  return { url: p.url, alt: p.alt_text ?? b.name };
+}
+
+/** Featured/top businesses for the homepage (photos joined). */
+export async function listFeaturedBusinesses(
+  limit = 8,
+): Promise<BusinessWithPhotos[]> {
+  return safe(async () => {
+    const { data, error } = await db()
+      .from("businesses")
+      .select(
+        "*, city:cities(*, state:states(*, country:countries(*))), category:categories(*), photos:business_photos(url,alt_text,is_primary,sort_order)",
+      )
+      .eq("status", "published")
+      .order("featured_city", { ascending: false })
+      .order("rating_avg", { ascending: false })
+      .limit(limit);
+    if (error) throw error;
+    return (data as unknown as BusinessWithPhotos[]) ?? [];
+  }, []);
+}
+
+export interface GeoTree {
+  countries: (Country & {
+    states: (State & { cities: City[] })[];
+  })[];
+}
+
+/**
+ * Full geo tree for the hero cascading selects. Tiny today (2 countries);
+ * switch HeroFinder to an /api/geo per-state fetch once cities exceed ~200.
+ */
+export const getGeoTree = unstable_cache(
+  async (): Promise<GeoTree> => {
+    try {
+      const [{ data: countries }, { data: states }, { data: cities }] =
+        await Promise.all([
+          db().from("countries").select("*").eq("is_active", true).order("name"),
+          db().from("states").select("*").order("name"),
+          db().from("cities").select("*").order("name"),
+        ]);
+      const stateList = (states as State[]) ?? [];
+      const cityList = (cities as City[]) ?? [];
+      return {
+        countries: ((countries as Country[]) ?? []).map((c) => ({
+          ...c,
+          states: stateList
+            .filter((s) => s.country_id === c.id)
+            .map((s) => ({
+              ...s,
+              cities: cityList.filter((ci) => ci.state_id === s.id),
+            })),
+        })),
+      };
+    } catch (e) {
+      console.error("[taw geo]", (e as Error).message);
+      return { countries: [] };
+    }
+  },
+  ["geo-tree"],
+  { revalidate: 3600, tags: ["geo"] },
+);
 
 type CityJoin = { city: (City & { state: State & { country: Country } }) | null };
 

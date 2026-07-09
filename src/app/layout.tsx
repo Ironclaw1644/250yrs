@@ -7,8 +7,6 @@ import "./globals.css";
 import { brand, siteUrl } from "@/lib/brand";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
 import { JsonLd } from "@/components/JsonLd";
-import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
 
 // We import the FA stylesheet ourselves; stop it auto-injecting a second copy.
 config.autoAddCss = false;
@@ -54,13 +52,13 @@ export const metadata: Metadata = {
     siteName: brand.name,
     locale: "en_US",
     type: "website",
-    images: [{ url: "/brand/logo.png", width: 1024, height: 1024, alt: brand.name }],
+    images: [{ url: "/images/marketing/og.jpg", width: 1200, height: 630, alt: brand.name }],
   },
   twitter: {
     card: "summary_large_image",
     title: brand.name,
     description: brand.shortPitch,
-    images: ["/brand/logo.png"],
+    images: ["/images/marketing/og.jpg"],
   },
   robots: {
     index: true,
@@ -76,11 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         className={`${display.variable} ${heading.variable} ${body.variable} ${mono.variable}`}
       >
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
-        </div>
+        {children}
       </body>
     </html>
   );

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "./Icon";
 import { Stars } from "./Stars";
@@ -8,18 +9,34 @@ export function BusinessCard({
   business,
   href,
   categorySlug,
+  photoUrl,
+  photoAlt,
+  cityLabel,
 }: {
   business: Business;
   href: string;
   categorySlug: string;
+  photoUrl?: string | null;
+  photoAlt?: string | null;
+  cityLabel?: string;
 }) {
   const cat = CATEGORY_BY_SLUG[categorySlug];
   return (
     <Link href={href} className="card group block overflow-hidden">
-      <div className="relative flex aspect-[16/10] items-center justify-center bg-sign-navy">
-        <Icon name={cat?.icon ?? "store"} className="text-5xl text-gold/85" />
+      <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-sign-navy">
+        {photoUrl ? (
+          <Image
+            src={photoUrl}
+            alt={photoAlt ?? business.name}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-entrance ease-warm group-hover:scale-[1.03]"
+          />
+        ) : (
+          <Icon name={cat?.icon ?? "store"} className="text-5xl text-gold/85" />
+        )}
         {business.featured_city && (
-          <span className="absolute left-3 top-3 rounded-full bg-gold px-2.5 py-0.5 font-heading text-xs font-semibold uppercase tracking-wide text-navy-deep">
+          <span className="absolute left-3 top-3 rounded-full bg-gold px-2.5 py-0.5 font-heading text-xs font-semibold uppercase tracking-wide text-navy-deep shadow-card">
             Featured
           </span>
         )}
@@ -32,23 +49,21 @@ export function BusinessCard({
         <h3 className="font-heading text-h3 leading-tight text-navy transition-colors group-hover:text-barn">
           {business.name}
         </h3>
-        {business.tagline && (
-          <p className="mt-1 line-clamp-2 text-small text-stone">
-            {business.tagline}
-          </p>
-        )}
-        <div className="mt-3 flex items-center justify-between">
+        <div className="mt-2 flex items-center gap-2 text-small text-stone">
           {business.rating_count > 0 ? (
             <Stars rating={business.rating_avg} count={business.rating_count} />
           ) : (
-            <span className="text-small text-stone">New listing</span>
+            <span>New listing</span>
           )}
-          {business.address_line1 && (
-            <span className="inline-flex items-center gap-1 text-small text-stone">
-              <Icon name="location-dot" className="text-gold" />
-              {business.address_line1}
-            </span>
-          )}
+        </div>
+        <div className="mt-3 flex items-center justify-between border-t border-navy/10 pt-3">
+          <span className="inline-flex items-center gap-1 text-small text-stone">
+            <Icon name="location-dot" className="text-gold" />
+            {cityLabel ?? business.address_line1 ?? "Local"}
+          </span>
+          <span className="inline-flex items-center gap-1 font-heading text-small font-semibold uppercase tracking-wide text-barn">
+            View Details <Icon name="arrow-right" />
+          </span>
         </div>
       </div>
     </Link>

@@ -1,0 +1,167 @@
+[
+  {
+    "group": "hero",
+    "name": "hero-1",
+    "path": "/images/hero/hero-1.webp"
+  },
+  {
+    "group": "hero",
+    "name": "hero-2",
+    "path": "/images/hero/hero-2.webp"
+  },
+  {
+    "group": "categories",
+    "name": "fried-food",
+    "path": "/images/categories/fried-food.webp"
+  },
+  {
+    "group": "categories",
+    "name": "soul-food",
+    "path": "/images/categories/soul-food.webp"
+  },
+  {
+    "group": "categories",
+    "name": "fish-markets",
+    "path": "/images/categories/fish-markets.webp"
+  },
+  {
+    "group": "categories",
+    "name": "grocery-markets",
+    "path": "/images/categories/grocery-markets.webp"
+  },
+  {
+    "group": "categories",
+    "name": "food-trucks",
+    "path": "/images/categories/food-trucks.webp"
+  },
+  {
+    "group": "categories",
+    "name": "hair-salons",
+    "path": "/images/categories/hair-salons.webp"
+  },
+  {
+    "group": "categories",
+    "name": "barber-shops",
+    "path": "/images/categories/barber-shops.webp"
+  },
+  {
+    "group": "categories",
+    "name": "tire-shops",
+    "path": "/images/categories/tire-shops.webp"
+  },
+  {
+    "group": "categories",
+    "name": "car-washes",
+    "path": "/images/categories/car-washes.webp"
+  },
+  {
+    "group": "categories",
+    "name": "clothing-stores",
+    "path": "/images/categories/clothing-stores.webp"
+  },
+  {
+    "group": "categories",
+    "name": "repair-shops",
+    "path": "/images/categories/repair-shops.webp"
+  },
+  {
+    "group": "categories",
+    "name": "beauty-supply",
+    "path": "/images/categories/beauty-supply.webp"
+  },
+  {
+    "group": "categories",
+    "name": "bakeries",
+    "path": "/images/categories/bakeries.webp"
+  },
+  {
+    "group": "categories",
+    "name": "local-shops",
+    "path": "/images/categories/local-shops.webp"
+  },
+  {
+    "group": "marketing",
+    "name": "advertise-1",
+    "path": "/images/marketing/advertise-1.webp"
+  },
+  {
+    "group": "marketing",
+    "name": "advertise-2",
+    "path": "/images/marketing/advertise-2.webp"
+  },
+  {
+    "group": "marketing",
+    "name": "og",
+    "path": "/images/marketing/og.jpg"
+  },
+  {
+    "group": "demo",
+    "name": "big-als-fish-fry-berea-1",
+    "path": "/images/demo/big-als-fish-fry-berea-1.webp"
+  },
+  {
+    "group": "demo",
+    "name": "big-als-fish-fry-berea-2",
+    "path": "/images/demo/big-als-fish-fry-berea-2.webp"
+  },
+  {
+    "group": "demo",
+    "name": "big-als-fish-fry-berea-3",
+    "path": "/images/demo/big-als-fish-fry-berea-3.webp"
+  },
+  {
+    "group": "demo",
+    "name": "bluegrass-chicken-shack-berea-1",
+    "path": "/images/demo/bluegrass-chicken-shack-berea-1.webp"
+  },
+  {
+    "group": "demo",
+    "name": "bluegrass-chicken-shack-berea-2",
+    "path": "/images/demo/bluegrass-chicken-shack-berea-2.webp"
+  },
+  {
+    "group": "demo",
+    "name": "bluegrass-chicken-shack-berea-3",
+    "path": "/images/demo/bluegrass-chicken-shack-berea-3.webp"
+  },
+  {
+    "group": "demo",
+    "name": "miss-rubys-fry-house-berea-1",
+    "path": "/images/demo/miss-rubys-fry-house-berea-1.webp"
+  },
+  {
+    "group": "demo",
+    "name": "miss-rubys-fry-house-berea-2",
+    "path": "/images/demo/miss-rubys-fry-house-berea-2.webp"
+  },
+  {
+    "group": "demo",
+    "name": "miss-rubys-fry-house-berea-3",
+    "path": "/images/demo/miss-rubys-fry-house-berea-3.webp"
+  },
+  {
+    "group": "demo",
+    "name": "classic-cuts-barber-berea-1",
+    "path": "/images/demo/classic-cuts-barber-berea-1.webp"
+  },
+  {
+    "group": "demo",
+    "name": "classic-cuts-barber-berea-2",
+    "path": "/images/demo/classic-cuts-barber-berea-2.webp"
+  },
+  {
+    "group": "demo",
+    "name": "classic-cuts-barber-berea-3",
+    "path": "/images/demo/classic-cuts-barber-berea-3.webp"
+  },
+  {
+    "group": "demo",
+    "name": "fade-factory-berea-1",
+    "path": "/images/demo/fade-factory-berea-1.webp"
+  },
+  {
+    "group": "demo",
+    "name": "fade-factory-berea-2",
+    "path": "/images/demo/fade-factory-berea-2.webp"
+  }
+]

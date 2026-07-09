@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { Icon } from "./Icon";
+import { toggleFavorite, trackClick } from "@/lib/actions/customer";
 
 type Props = {
+  businessId: string;
   name: string;
   phone?: string | null;
   lat?: number | null;
@@ -12,11 +15,20 @@ type Props = {
   demo?: boolean;
 };
 
-/** The action row from the logo mockup: Call · Directions · Save · Share.
- *  On DEMO listings, transactional actions become "Claim this business" (Fable P1). */
-export function ActionBar({ name, phone, lat, lng, address, demo }: Props) {
+/** Call · Directions · Save · Share. Demo listings get "Claim this business". */
+export function ActionBar({ businessId, name, phone, lat, lng, address, demo }: Props) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [saved, setSaved] = useState(false);
   const [pop, setPop] = useState(false);
+
+  useEffect(() => {
+    if (demo || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) return;
+    fetch("/api/me/favorites")
+      .then((r) => r.json())
+      .then((d: { ids: string[] }) => setSaved(d.ids.includes(businessId)))
+      .catch(() => {});
+  }, [businessId, demo]);
 
   const mapsQuery = encodeURIComponent(
     lat != null && lng != null ? `${lat},${lng}` : `${name} ${address ?? ""}`,
@@ -24,9 +36,21 @@ export function ActionBar({ name, phone, lat, lng, address, demo }: Props) {
   const directions = `https://www.google.com/maps/dir/?api=1&destination=${mapsQuery}`;
 
   function share() {
+    if (!demo) void trackClick(businessId, "share");
     const url = typeof window !== "undefined" ? window.location.href : "";
     if (navigator.share) navigator.share({ title: name, url }).catch(() => {});
     else navigator.clipboard?.writeText(url);
+  }
+
+  async function onSave() {
+    setPop(true);
+    setTimeout(() => setPop(false), 350);
+    const res = await toggleFavorite(businessId);
+    if ("signedOut" in res) {
+      router.push(`/login?next=${encodeURIComponent(pathname)}`);
+      return;
+    }
+    setSaved(res.saved);
   }
 
   if (demo) {
@@ -45,7 +69,11 @@ export function ActionBar({ name, phone, lat, lng, address, demo }: Props) {
   return (
     <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap sm:items-center">
       {phone && (
-        <a href={`tel:${phone.replace(/[^0-9+]/g, "")}`} className="btn btn-primary">
+        <a
+          href={`tel:${phone.replace(/[^0-9+]/g, "")}`}
+          onClick={() => void trackClick(businessId, "call")}
+          className="btn btn-primary"
+        >
           <Icon name="phone" /> Call Now
         </a>
       )}
@@ -53,20 +81,12 @@ export function ActionBar({ name, phone, lat, lng, address, demo }: Props) {
         href={directions}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => void trackClick(businessId, "directions")}
         className="btn btn-secondary"
       >
         <Icon name="location-dot" /> Directions
       </a>
-      <button
-        type="button"
-        onClick={() => {
-          setSaved((s) => !s);
-          setPop(true);
-          setTimeout(() => setPop(false), 350);
-        }}
-        aria-pressed={saved}
-        className="btn btn-secondary"
-      >
+      <button type="button" onClick={onSave} aria-pressed={saved} className="btn btn-secondary">
         <Icon
           name="heart"
           className={`${saved ? "text-barn" : ""} ${pop ? "animate-pop-heart" : ""}`}
