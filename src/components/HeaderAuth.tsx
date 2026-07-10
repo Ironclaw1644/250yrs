@@ -34,7 +34,7 @@ export function HeaderAuth() {
   return (
     <Link
       href={signedIn ? "/account" : "/login"}
-      className="hidden items-center gap-1.5 font-heading font-semibold uppercase tracking-wide text-navy hover:text-barn sm:inline-flex"
+      className="hidden items-center gap-1.5 font-sans font-bold text-navy hover:text-barn sm:inline-flex"
     >
       <Icon name={signedIn ? "circle-check" : "right-to-bracket"} />
       {signedIn ? "Account" : "Sign in"}

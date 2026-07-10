@@ -36,7 +36,7 @@ export function BusinessCard({
           <Icon name={cat?.icon ?? "store"} className="text-5xl text-gold/85" />
         )}
         {business.featured_city && (
-          <span className="absolute left-3 top-3 rounded-full bg-gold px-2.5 py-0.5 font-heading text-xs font-semibold uppercase tracking-wide text-navy-deep shadow-card">
+          <span className="absolute left-3 top-3 rounded-full bg-gold px-2.5 py-0.5 font-sans text-xs font-bold text-navy-deep shadow-card">
             Featured
           </span>
         )}
@@ -61,7 +61,7 @@ export function BusinessCard({
             <Icon name="location-dot" className="text-gold" />
             {cityLabel ?? business.address_line1 ?? "Local"}
           </span>
-          <span className="inline-flex items-center gap-1 font-heading text-small font-semibold uppercase tracking-wide text-barn">
+          <span className="inline-flex items-center gap-1 font-sans text-small font-bold text-barn">
             View Details <Icon name="arrow-right" />
           </span>
         </div>

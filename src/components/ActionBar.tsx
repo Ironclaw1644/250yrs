@@ -56,7 +56,7 @@ export function ActionBar({ businessId, name, phone, lat, lng, address, demo }: 
   if (demo) {
     return (
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <span className="inline-flex items-center gap-2 rounded-md bg-gold/15 px-3 py-2 font-heading text-small font-semibold uppercase tracking-wide text-navy">
+        <span className="inline-flex items-center gap-2 rounded-md bg-gold/15 px-3 py-2 font-sans text-small font-bold text-navy">
           <Icon name="circle-info" className="text-gold" /> Demo listing
         </span>
         <a href="/advertise" className="btn btn-gold">

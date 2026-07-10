@@ -36,7 +36,7 @@ export default async function NewListingPage({
         <Field label="Business name" name="name" required placeholder="Big Al's Fish Fry" />
 
         <label className="block">
-          <span className="mb-1 block font-heading text-small font-semibold uppercase tracking-wide text-navy">
+          <span className="mb-1 block font-sans text-small font-bold text-navy">
             Category
           </span>
           <select
@@ -59,7 +59,7 @@ export default async function NewListingPage({
         <Field label="Tagline (one short line)" name="tagline" placeholder="Fresh-fried catfish & wings since 1998" />
 
         <label className="block">
-          <span className="mb-1 block font-heading text-small font-semibold uppercase tracking-wide text-navy">
+          <span className="mb-1 block font-sans text-small font-bold text-navy">
             Description
           </span>
           <textarea

@@ -15,10 +15,10 @@ export function AdvertisePanel() {
       <div className="sign-plate overflow-hidden !p-0">
         <div className="grid lg:grid-cols-[1.2fr_1fr]">
           <div className="p-8 sm:p-12">
-            <p className="font-heading text-eyebrow font-semibold uppercase tracking-widest text-gold">
+            <p className="font-sans text-eyebrow font-bold uppercase tracking-[0.1em] text-gold">
               Advertise your business
             </p>
-            <h2 className="stamp mt-3 text-3xl uppercase text-cream sm:text-4xl">
+            <h2 className="stamp mt-3 text-3xl text-cream sm:text-4xl">
               <Editable id="copy.home.advertise.headline">Get Your Business Seen!</Editable>
             </h2>
             <ul className="mt-6 space-y-3">
@@ -37,7 +37,7 @@ export function AdvertisePanel() {
                 <p className="text-small text-stone">per month</p>
               </div>
               <div className="relative rounded-lg bg-paper-raised p-4 text-center ring-2 ring-gold">
-                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-gold px-2 py-0.5 font-heading text-[10px] font-bold uppercase tracking-wide text-navy-deep">
+                <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-gold px-2 py-0.5 font-sans text-[10px] font-bold text-navy-deep">
                   Best value
                 </span>
                 <p className="eyebrow">Yearly</p>

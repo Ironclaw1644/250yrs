@@ -38,7 +38,7 @@ export function Field({
 }: { label: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
     <label className="block">
-      <span className="mb-1 block font-heading text-small font-semibold uppercase tracking-wide text-navy">
+      <span className="mb-1 block font-sans text-small font-bold text-navy">
         {label}
       </span>
       <input

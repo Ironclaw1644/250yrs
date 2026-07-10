@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Alfa_Slab_One, Oswald, Public_Sans, Spline_Sans_Mono } from "next/font/google";
+import { Fraunces, Nunito_Sans, Spline_Sans_Mono } from "next/font/google";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import "./globals.css";
@@ -11,20 +11,16 @@ import { JsonLd } from "@/components/JsonLd";
 // We import the FA stylesheet ourselves; stop it auto-injecting a second copy.
 config.autoAddCss = false;
 
-const display = Alfa_Slab_One({
-  weight: "400",
+// Warm, family-friendly type: Fraunces (soft storybook serif) for display,
+// Nunito Sans (rounded, approachable) for headings/UI/body.
+const display = Fraunces({
+  weight: "variable",
   subsets: ["latin"],
   variable: "--font-display",
   display: "swap",
 });
-const heading = Oswald({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-  variable: "--font-heading",
-  display: "swap",
-});
-const body = Public_Sans({
-  weight: ["400", "500", "600", "700"],
+const body = Nunito_Sans({
+  weight: "variable",
   subsets: ["latin"],
   variable: "--font-body",
   display: "swap",
@@ -71,7 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body
-        className={`${display.variable} ${heading.variable} ${body.variable} ${mono.variable}`}
+        className={`${display.variable} ${body.variable} ${mono.variable}`}
       >
         <JsonLd data={[organizationJsonLd(), websiteJsonLd()]} />
         {children}

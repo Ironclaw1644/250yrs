@@ -39,11 +39,11 @@ export default function AdvertisePage() {
           <span className="pin-badge h-16 w-16">
             <Icon name="bullhorn" className="text-2xl" />
           </span>
-          <p className="font-heading text-eyebrow font-semibold uppercase tracking-widest text-gold">
+          <p className="font-sans text-eyebrow font-bold uppercase tracking-[0.1em] text-gold">
             For business owners
           </p>
           <h1 className="stamp text-3xl text-cream sm:text-5xl">
-            GET FOUND BY LOCAL CUSTOMERS
+            Get found by local customers
           </h1>
           <p className="max-w-xl text-cream/85">
             Put your shop on the map customers actually use. Simple to set up, no
@@ -79,7 +79,7 @@ export default function AdvertisePage() {
           </div>
           {/* Annual */}
           <div className="card relative flex flex-col p-8 shadow-raised">
-            <span className="absolute right-5 top-5 rounded-full bg-gold px-3 py-1 font-heading text-xs font-semibold uppercase tracking-wide text-navy-deep">
+            <span className="absolute right-5 top-5 rounded-full bg-gold px-3 py-1 font-sans text-xs font-bold text-navy-deep">
               Save $140
             </span>
             <p className="eyebrow">Yearly</p>

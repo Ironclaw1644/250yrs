@@ -29,11 +29,11 @@ export function HomeHero({ geo }: { geo: GeoTree }) {
 
       <div className="container-shell relative py-16 sm:py-24">
         <div className="max-w-3xl">
-          <h1 className="stamp reveal text-4xl uppercase leading-tight text-cream sm:text-6xl" style={{ "--i": 0 } as React.CSSProperties}>
+          <h1 className="stamp reveal text-4xl leading-tight text-cream sm:text-6xl" style={{ "--i": 0 } as React.CSSProperties}>
             <Editable id="copy.home.hero.headline">Find the Real Local Stores</Editable>
           </h1>
           <p
-            className="reveal mt-3 font-heading text-xl font-semibold uppercase tracking-wide text-gold sm:text-3xl"
+            className="stamp reveal mt-3 text-2xl italic text-gold sm:text-3xl"
             style={{ "--i": 1 } as React.CSSProperties}
           >
             <Editable id="copy.home.hero.subline">
@@ -58,7 +58,7 @@ export function HomeHero({ geo }: { geo: GeoTree }) {
           className="reveal mt-5 flex flex-wrap items-center gap-2"
           style={{ "--i": 4 } as React.CSSProperties}
         >
-          <span className="font-heading text-small font-semibold uppercase tracking-wide text-cloud/80">
+          <span className="font-sans text-small font-bold text-cloud/80">
             Popular:
           </span>
           {POPULAR.map((p) => (

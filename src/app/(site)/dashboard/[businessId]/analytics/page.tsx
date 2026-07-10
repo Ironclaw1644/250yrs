@@ -77,7 +77,7 @@ export default async function AnalyticsPage({
               <span className="font-heading text-3xl font-bold text-navy">{k.value}</span>
               <Icon name={k.icon} className="text-gold" />
             </div>
-            <p className="mt-1 font-heading text-xs font-semibold uppercase tracking-wide text-stone">
+            <p className="mt-1 font-sans text-xs font-bold text-stone">
               {k.label}
             </p>
           </div>

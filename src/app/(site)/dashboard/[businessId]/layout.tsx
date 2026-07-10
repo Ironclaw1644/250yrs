@@ -30,7 +30,7 @@ export default async function BusinessDashboardLayout({
       <div className="mt-2 flex flex-wrap items-center gap-3">
         <h1 className="font-heading text-h1 text-navy">{biz.name}</h1>
         <span
-          className={`rounded-full px-2.5 py-0.5 font-heading text-xs font-semibold uppercase tracking-wide ${
+          className={`rounded-full px-2.5 py-0.5 font-sans text-xs font-bold ${
             biz.status === "published"
               ? "bg-success/15 text-success"
               : biz.status === "suspended"

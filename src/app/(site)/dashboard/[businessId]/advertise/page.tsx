@@ -92,7 +92,7 @@ export default async function AdvertisePage({ params, searchParams }: Params) {
             <div className="mt-6 flex items-start gap-3 rounded-xl border-2 border-gold/50 bg-gold/10 p-4">
               <Icon name="circle-info" className="mt-0.5 text-lg text-gold" />
               <p className="text-small text-char">
-                <strong className="font-heading uppercase tracking-wide text-navy">
+                <strong className="font-sans font-bold text-navy">
                   Checkout is being connected.
                 </strong>{" "}
                 Online payment turns on as soon as the Stripe account is linked —
@@ -127,7 +127,7 @@ function PlanCard({
       className={`card relative block p-6 ${highlight ? "shadow-raised" : ""}`}
     >
       {highlight && (
-        <span className="absolute right-4 top-4 rounded-full bg-gold px-2.5 py-0.5 font-heading text-xs font-semibold uppercase tracking-wide text-navy-deep">
+        <span className="absolute right-4 top-4 rounded-full bg-gold px-2.5 py-0.5 font-sans text-xs font-bold text-navy-deep">
           {note}
         </span>
       )}

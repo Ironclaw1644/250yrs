@@ -66,7 +66,7 @@ export default async function BusinessOverview({
       <div className="card p-6">
         <div className="flex items-center justify-between">
           <h2 className="font-heading text-h3 text-navy">Next steps</h2>
-          <span className="font-heading text-small font-semibold uppercase tracking-wide text-stone">
+          <span className="font-sans text-small font-bold text-stone">
             {doneCount}/{steps.length} done
           </span>
         </div>

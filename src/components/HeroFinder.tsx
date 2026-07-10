@@ -63,7 +63,7 @@ export function HeroFinder({
     <div className="rounded-xl bg-paper/95 p-3 shadow-raised backdrop-blur sm:p-4">
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_1fr_auto]">
         <label className="block">
-          <span className="mb-1 block text-left font-heading text-xs font-semibold uppercase tracking-wide text-stone">
+          <span className="mb-1 block text-left font-sans text-xs font-bold text-stone">
             Country
           </span>
           <select
@@ -83,7 +83,7 @@ export function HeroFinder({
           </select>
         </label>
         <label className="block">
-          <span className="mb-1 block text-left font-heading text-xs font-semibold uppercase tracking-wide text-stone">
+          <span className="mb-1 block text-left font-sans text-xs font-bold text-stone">
             State
           </span>
           <select
@@ -104,7 +104,7 @@ export function HeroFinder({
           </select>
         </label>
         <label className="block">
-          <span className="mb-1 block text-left font-heading text-xs font-semibold uppercase tracking-wide text-stone">
+          <span className="mb-1 block text-left font-sans text-xs font-bold text-stone">
             City
           </span>
           <select
@@ -122,7 +122,7 @@ export function HeroFinder({
           </select>
         </label>
         <label className="block">
-          <span className="mb-1 block text-left font-heading text-xs font-semibold uppercase tracking-wide text-stone">
+          <span className="mb-1 block text-left font-sans text-xs font-bold text-stone">
             Category
           </span>
           <select

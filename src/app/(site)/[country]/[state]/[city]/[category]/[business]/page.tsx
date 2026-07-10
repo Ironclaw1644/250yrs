@@ -140,7 +140,7 @@ export default async function BusinessPage({ params }: Params) {
           />
         )}
         <div className="relative">
-          <p className="font-heading text-eyebrow font-semibold uppercase tracking-widest text-gold">
+          <p className="font-sans text-eyebrow font-bold uppercase tracking-[0.1em] text-gold">
             {cat?.name}
             {city ? ` · ${city.name}, ${region}` : ""}
           </p>
@@ -179,7 +179,7 @@ export default async function BusinessPage({ params }: Params) {
         <div className="mt-6 flex items-start gap-3 rounded-xl border-2 border-gold/50 bg-gold/10 p-4">
           <Icon name="circle-info" className="mt-0.5 text-lg text-gold" />
           <p className="text-small text-char">
-            <strong className="font-heading uppercase tracking-wide text-navy">
+            <strong className="font-sans font-bold text-navy">
               Demo listing.
             </strong>{" "}
             This is a sample showing how a real business page looks on True
@@ -241,7 +241,7 @@ export default async function BusinessPage({ params }: Params) {
                       {r.body && <p className="mt-2 text-char/90">{r.body}</p>}
                       {r.response_body ? (
                         <div className="mt-3 rounded-md bg-linen/70 p-3 text-small">
-                          <span className="font-heading font-semibold uppercase tracking-wide text-navy">
+                          <span className="font-sans font-bold text-navy">
                             Owner response
                           </span>
                           <p className="mt-1 text-char/90">{r.response_body}</p>

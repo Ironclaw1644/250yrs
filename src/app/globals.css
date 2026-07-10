@@ -10,10 +10,11 @@
 @tailwind utilities;
 
 :root {
-  /* next/font fills these; fallbacks keep var() valid if a font fails */
-  --font-display: "Alfa Slab One", Rockwell, Georgia, serif;
-  --font-heading: "Oswald", system-ui, sans-serif;
-  --font-body: "Public Sans", system-ui, sans-serif;
+  /* next/font fills these; fallbacks keep var() valid if a font fails.
+     Family-warm pairing: Fraunces (soft storybook serif) + Nunito Sans (rounded UI). */
+  --font-display: "Fraunces", Georgia, serif;
+  --font-heading: var(--font-body);
+  --font-body: "Nunito Sans", system-ui, sans-serif;
   --font-mono: "Spline Sans Mono", ui-monospace, monospace;
 
   /* Core brand — sampled from the logo */
@@ -112,16 +113,25 @@
     background-color: var(--night);
     color: var(--cloud);
   }
+  /* Big headings = warm Fraunces serif; small headings = friendly Nunito bold */
   h1,
-  h2,
-  h3,
-  h4 {
-    font-family: var(--font-heading);
-    font-weight: 700;
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-optical-sizing: auto;
     color: var(--navy);
     text-wrap: balance;
     margin: 0;
-    line-height: 1.1;
+    line-height: 1.12;
+  }
+  h3,
+  h4 {
+    font-family: var(--font-body);
+    font-weight: 800;
+    color: var(--navy);
+    text-wrap: balance;
+    margin: 0;
+    line-height: 1.2;
   }
   .theme-dark h1,
   .theme-dark h2,
@@ -164,9 +174,10 @@
   .display,
   .stamp {
     font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: 0.005em;
-    line-height: 0.98;
+    font-weight: 640;
+    font-optical-sizing: auto;
+    letter-spacing: -0.01em;
+    line-height: 1.08;
   }
 
   .paper-grain {
@@ -176,10 +187,10 @@
   }
 
   .eyebrow {
-    font-family: var(--font-heading);
-    font-weight: 600;
-    font-size: 0.75rem;
-    letter-spacing: 0.18em;
+    font-family: var(--font-body);
+    font-weight: 800;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--barn);
   }
@@ -246,7 +257,7 @@
   }
 
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-md font-heading font-semibold uppercase tracking-wide;
+    @apply inline-flex items-center justify-center gap-2 rounded-lg font-sans font-bold;
     min-height: 44px;
     padding: 0 1.25rem;
     transition: transform 120ms var(--ease-warm),

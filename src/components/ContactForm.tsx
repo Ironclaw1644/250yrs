@@ -30,7 +30,7 @@ export function ContactForm() {
       {/* honeypot */}
       <input type="text" name="company" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden />
       <label className="block">
-        <span className="mb-1 block font-heading text-small font-semibold uppercase tracking-wide text-navy">
+        <span className="mb-1 block font-sans text-small font-bold text-navy">
           Message
         </span>
         <textarea

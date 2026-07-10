@@ -76,7 +76,7 @@ export function BasicsForm({ business }: { business: Business }) {
       <Field label="Business name" name="name" required defaultValue={business.name} />
       <Field label="Tagline" name="tagline" defaultValue={business.tagline ?? ""} placeholder="One short line customers see first" />
       <label className="block">
-        <span className="mb-1 block font-heading text-small font-semibold uppercase tracking-wide text-navy">
+        <span className="mb-1 block font-sans text-small font-bold text-navy">
           Description
         </span>
         <textarea
@@ -118,7 +118,7 @@ export function PhotoManager({
         action={(fd) => run(() => addPhoto(businessId, fd), "Photo added ✓")}
       >
         <label className="block">
-          <span className="mb-1 block font-heading text-small font-semibold uppercase tracking-wide text-navy">
+          <span className="mb-1 block font-sans text-small font-bold text-navy">
             Add a photo
           </span>
           <input
@@ -126,7 +126,7 @@ export function PhotoManager({
             name="file"
             accept="image/*"
             required
-            className="text-small text-stone file:mr-3 file:rounded-md file:border-0 file:bg-navy file:px-3 file:py-2 file:font-heading file:text-small file:font-semibold file:uppercase file:text-cream"
+            className="text-small text-stone file:mr-3 file:rounded-lg file:border-0 file:bg-navy file:px-3 file:py-2 file:font-sans file:text-small file:font-bold file:text-cream"
           />
         </label>
         <button type="submit" disabled={pending} className="btn btn-gold">
@@ -154,7 +154,7 @@ export function PhotoManager({
                   type="button"
                   disabled={pending}
                   onClick={() => run(() => setPrimaryPhoto(businessId, p.id), "Cover updated ✓")}
-                  className="font-heading text-xs font-semibold uppercase text-navy hover:text-barn"
+                  className="font-sans text-xs font-bold text-navy hover:text-barn"
                 >
                   Make cover
                 </button>
@@ -205,7 +205,7 @@ export function HoursEditor({
           const closed = h ? h.is_closed || !h.open_time : d === 0;
           return (
             <div key={d} className="grid grid-cols-[6rem_1fr_1fr_auto] items-center gap-3">
-              <span className="font-heading text-small font-semibold uppercase tracking-wide text-navy">
+              <span className="font-sans text-small font-bold text-navy">
                 {DAY_NAMES[d]}
               </span>
               <input
@@ -408,7 +408,7 @@ export function CouponsManager({
           <Field label="Coupon headline" name="title" required placeholder='e.g. "20% off any plate"' />
         </div>
         <label className="block">
-          <span className="mb-1 block font-heading text-small font-semibold uppercase tracking-wide text-navy">
+          <span className="mb-1 block font-sans text-small font-bold text-navy">
             Type
           </span>
           <select name="discount_type" className="h-12 w-full rounded-md border-[1.5px] border-navy/15 bg-linen px-3 text-navy">
@@ -446,7 +446,7 @@ export function CouponsManager({
                 type="button"
                 disabled={pending}
                 onClick={() => run(() => toggleCoupon(businessId, c.id, !c.is_active))}
-                className={`rounded-full px-3 py-1 font-heading text-xs font-semibold uppercase ${
+                className={`rounded-full px-3 py-1 font-sans text-xs font-bold ${
                   c.is_active ? "bg-success/15 text-success" : "bg-stone/15 text-stone"
                 }`}
               >

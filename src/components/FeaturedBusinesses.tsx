@@ -19,7 +19,7 @@ export async function FeaturedBusinesses() {
         </div>
         <Link
           href="/us"
-          className="hidden items-center gap-1 font-heading font-semibold uppercase tracking-wide text-barn hover:underline sm:inline-flex"
+          className="hidden items-center gap-1 font-sans font-bold text-barn hover:underline sm:inline-flex"
         >
           View All <Icon name="arrow-right" />
         </Link>

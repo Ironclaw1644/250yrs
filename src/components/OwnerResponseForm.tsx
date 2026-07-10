@@ -17,7 +17,7 @@ export function OwnerResponseForm({ reviewId }: { reviewId: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="mt-2 inline-flex items-center gap-1.5 font-heading text-small font-semibold uppercase tracking-wide text-navy hover:text-barn"
+        className="mt-2 inline-flex items-center gap-1.5 font-sans text-small font-bold text-navy hover:text-barn"
       >
         <Icon name="comment" /> Respond as owner
       </button>

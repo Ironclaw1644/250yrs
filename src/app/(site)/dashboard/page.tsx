@@ -80,7 +80,7 @@ export default async function DashboardPage() {
                 <div>
                   <div className="flex items-center gap-3">
                     <h2 className="font-heading text-h3 text-navy">{b.name}</h2>
-                    <span className={`rounded-full px-2.5 py-0.5 font-heading text-xs font-semibold uppercase tracking-wide ${s.cls}`}>
+                    <span className={`rounded-full px-2.5 py-0.5 font-sans text-xs font-bold ${s.cls}`}>
                       {s.label}
                     </span>
                   </div>

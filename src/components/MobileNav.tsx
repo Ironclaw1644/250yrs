@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Icon } from "./Icon";
 
 const LINKS = [
@@ -15,6 +16,13 @@ const LINKS = [
 
 export function MobileNav() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Close when the route changes
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
+
   return (
     <div className="lg:hidden">
       <button
@@ -22,22 +30,42 @@ export function MobileNav() {
         aria-label="Menu"
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
-        className="grid h-10 w-10 place-items-center rounded-md text-navy"
+        className="grid h-11 w-11 place-items-center rounded-lg text-navy transition-colors duration-std ease-warm hover:bg-linen"
       >
-        <Icon name={open ? "xmark" : "bars"} className="text-xl" />
+        <span
+          className={`inline-block transition-transform duration-std ease-warm ${
+            open ? "rotate-90" : "rotate-0"
+          }`}
+        >
+          <Icon name={open ? "xmark" : "bars"} className="text-xl" />
+        </span>
       </button>
-      {open && (
-        <div className="absolute inset-x-0 top-full z-50 border-b-2 border-gold/40 bg-paper shadow-raised">
+
+      {/* Smooth drop-down: grid-rows 0fr -> 1fr height animation + fade/slide */}
+      <div
+        className={`absolute inset-x-0 top-full z-50 grid border-b-2 border-gold/40 bg-paper shadow-raised transition-[grid-template-rows,opacity] duration-entrance ease-warm ${
+          open ? "grid-rows-[1fr] opacity-100" : "pointer-events-none grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden">
           <nav className="container-shell py-3">
             <ul className="divide-y divide-navy/10">
-              {LINKS.map((l) => (
-                <li key={l.href}>
+              {LINKS.map((l, i) => (
+                <li
+                  key={l.href}
+                  className={`transition-[opacity,transform] duration-std ease-warm ${
+                    open ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0"
+                  }`}
+                  style={{ transitionDelay: open ? `${80 + i * 45}ms` : "0ms" }}
+                >
                   <Link
                     href={l.href}
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 py-3 font-heading font-semibold uppercase tracking-wide text-navy"
+                    className="flex items-center gap-3 py-3.5 font-sans text-lg font-bold text-navy transition-colors hover:text-barn"
                   >
-                    <Icon name={l.icon} className="text-gold" fixedWidth />
+                    <span className="grid h-9 w-9 place-items-center rounded-full bg-navy">
+                      <Icon name={l.icon} className="text-small text-gold" fixedWidth />
+                    </span>
                     {l.label}
                   </Link>
                 </li>
@@ -45,7 +73,7 @@ export function MobileNav() {
             </ul>
           </nav>
         </div>
-      )}
+      </div>
     </div>
   );
 }

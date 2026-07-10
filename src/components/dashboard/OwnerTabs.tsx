@@ -28,7 +28,7 @@ export function OwnerTabs({ businessId }: { businessId: string }) {
           <Link
             key={t.seg}
             href={href}
-            className={`flex shrink-0 items-center gap-1.5 rounded-t-md px-3 py-2 font-heading text-small font-semibold uppercase tracking-wide ${
+            className={`flex shrink-0 items-center gap-1.5 rounded-t-md px-3 py-2 font-sans text-small font-bold ${
               active
                 ? "border-b-[3px] border-barn text-barn"
                 : "text-stone hover:text-navy"

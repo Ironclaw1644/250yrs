@@ -17,7 +17,7 @@ export function TrustBar() {
           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-navy">
             <Icon name={it.icon} className="text-gold" />
           </span>
-          <span className="font-heading text-small font-semibold uppercase leading-snug tracking-wide text-navy">
+          <span className="font-sans text-small font-bold leading-snug text-navy">
             {it.label}
           </span>
         </div>

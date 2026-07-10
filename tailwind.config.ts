@@ -55,8 +55,8 @@ const config: Config = {
         info: "rgb(var(--info-rgb)/<alpha-value>)",
       },
       fontFamily: {
-        display: ["var(--font-display)", "Rockwell", "Georgia", "serif"],
-        heading: ["var(--font-heading)", "Oswald", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Georgia", "serif"],
+        heading: ["var(--font-heading)", "system-ui", "sans-serif"],
         sans: ["var(--font-body)", "system-ui", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
