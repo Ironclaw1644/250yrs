@@ -424,6 +424,147 @@
   }
 }
 
+/* ===== Billboard hero cinematics ===== */
+@keyframes kenburns {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+  100% {
+    transform: scale(1.14) translate(-1.5%, -2%);
+  }
+}
+@keyframes ember-float {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.9;
+  }
+  85% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-9rem) translateX(1.2rem);
+    opacity: 0;
+  }
+}
+@keyframes billboard-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-60%) rotate(2deg);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(3%) rotate(-1.2deg);
+  }
+  75% {
+    transform: translateY(-1.5%) rotate(0.7deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+}
+@keyframes billboard-sway {
+  0%,
+  100% {
+    transform: rotate(-0.7deg);
+  }
+  50% {
+    transform: rotate(0.7deg);
+  }
+}
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.06);
+  }
+}
+@keyframes logo-shine {
+  0% {
+    background-position: -160% 0;
+  }
+  22% {
+    background-position: 160% 0;
+  }
+  100% {
+    background-position: 160% 0;
+  }
+}
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@layer components {
+  /* Sign assembly: outer = entrance drop + idle sway; inner = pointer 3D tilt */
+  .billboard-outer {
+    transform-origin: top center;
+    animation:
+      billboard-drop 1100ms cubic-bezier(0.34, 1.4, 0.5, 1) both,
+      billboard-sway 7s ease-in-out 1400ms infinite;
+  }
+  .billboard-tilt {
+    transform-style: preserve-3d;
+    transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+    transition: transform 300ms var(--ease-warm);
+    will-change: transform;
+  }
+  /* Shine sweep clipped to the logo's own silhouette via mask */
+  .billboard-shine {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(
+      115deg,
+      transparent 42%,
+      rgba(247, 194, 74, 0.5) 50%,
+      rgba(255, 255, 255, 0.35) 52%,
+      transparent 60%
+    );
+    background-size: 260% 100%;
+    animation: logo-shine 7s ease-in-out 2s infinite;
+    -webkit-mask-image: var(--logo-mask);
+    mask-image: var(--logo-mask);
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+  .ember {
+    position: absolute;
+    border-radius: 9999px;
+    background: radial-gradient(
+      circle,
+      var(--gold-hi) 0%,
+      rgba(240, 168, 24, 0.35) 60%,
+      transparent 100%
+    );
+    filter: blur(0.5px);
+    animation: ember-float linear infinite;
+    pointer-events: none;
+  }
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 34s linear infinite;
+  }
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

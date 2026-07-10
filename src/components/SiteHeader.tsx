@@ -2,8 +2,8 @@ import Link from "next/link";
 import { SearchBar } from "./SearchBar";
 import { Icon } from "./Icon";
 import { HeaderAuth } from "./HeaderAuth";
+import { HeaderLogo } from "./HeaderLogo";
 import { MobileNav } from "./MobileNav";
-import { brand } from "@/lib/brand";
 
 const LEFT_NAV = [
   { href: "/us", label: "Find Businesses" },
@@ -38,15 +38,8 @@ export function SiteHeader() {
           ))}
         </div>
 
-        {/* Center: the logo, big and proud (biggest on mobile per client) */}
-        <Link
-          href="/"
-          className="justify-self-center transition-transform duration-std ease-warm hover:scale-[1.03]"
-          aria-label={brand.name}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={brand.logo} alt={brand.name} className="h-20 w-auto sm:h-[5.25rem]" />
-        </Link>
+        {/* Center: the logo — hands the spotlight to the homepage billboard on desktop */}
+        <HeaderLogo />
 
         {/* Right: desktop links + auth + menu */}
         <div className="flex items-center justify-end gap-5">
