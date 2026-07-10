@@ -4,6 +4,7 @@ import { Icon } from "./Icon";
 import { HeaderAuth } from "./HeaderAuth";
 import { HeaderLogo } from "./HeaderLogo";
 import { MobileNav } from "./MobileNav";
+import { ScrollProgress } from "./ScrollProgress";
 
 const LEFT_NAV = [
   { href: "/us", label: "Find Businesses" },
@@ -68,6 +69,8 @@ export function SiteHeader() {
       <div className="container-shell pb-3 md:hidden">
         <SearchBar />
       </div>
+
+      <ScrollProgress />
     </header>
   );
 }

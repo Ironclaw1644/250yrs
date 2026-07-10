@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "./Icon";
 import { Editable } from "./Editable";
+import { Spotlight } from "./Spotlight";
 
 const CHECKS = [
   "Reach more local customers",
@@ -12,7 +13,7 @@ const CHECKS = [
 export function AdvertisePanel() {
   return (
     <section className="container-shell py-14 sm:py-20">
-      <div className="sign-plate overflow-hidden !p-0">
+      <Spotlight className="sign-plate overflow-hidden !p-0">
         <div className="grid lg:grid-cols-[1.2fr_1fr]">
           <div className="p-8 sm:p-12">
             <p className="font-sans text-eyebrow font-bold uppercase tracking-[0.1em] text-gold">
@@ -23,7 +24,7 @@ export function AdvertisePanel() {
             </h2>
             <ul className="mt-6 space-y-3">
               {CHECKS.map((c) => (
-                <li key={c} className="flex items-start gap-3 text-cream/90">
+                <li key={c} className="flex items-start gap-3 text-cream">
                   <Icon name="circle-check" className="mt-1 text-gold" />
                   <span>{c}</span>
                 </li>
@@ -45,8 +46,9 @@ export function AdvertisePanel() {
                 <p className="text-small text-stone">per year</p>
               </div>
             </div>
-            <p className="mt-3 text-small text-cream/70">
-              Add-ons: video ads · featured placement · coupon campaigns · and more
+            <p className="mt-3 text-small text-cream">
+              <span className="font-bold text-gold">Add-ons:</span> video ads · featured
+              placement · coupon campaigns · and more
             </p>
 
             <Link href="/advertise" className="btn btn-gold mt-7">
@@ -65,7 +67,7 @@ export function AdvertisePanel() {
             <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/60 to-transparent" />
           </div>
         </div>
-      </div>
+      </Spotlight>
     </section>
   );
 }

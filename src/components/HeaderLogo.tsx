@@ -23,20 +23,24 @@ export function HeaderLogo() {
     return () => window.removeEventListener("scroll", onScroll);
   }, [isHome]);
 
-  const hideOnDesktop = isHome && !scrolled;
+  // The homepage billboard owns the logo until you scroll past it.
+  const yieldToBillboard = isHome && !scrolled;
 
   return (
     <Link
       href="/"
       className="justify-self-center transition-transform duration-std ease-warm hover:scale-[1.03]"
       aria-label={brand.name}
+      tabIndex={yieldToBillboard ? -1 : undefined}
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={brand.logo}
         alt={brand.name}
         className={`h-20 w-auto transition-all duration-entrance ease-warm sm:h-[5.25rem] ${
-          hideOnDesktop ? "lg:pointer-events-none lg:-translate-y-3 lg:opacity-0" : "lg:translate-y-0 lg:opacity-100"
+          yieldToBillboard
+            ? "pointer-events-none -translate-y-3 opacity-0"
+            : "translate-y-0 opacity-100"
         }`}
       />
     </Link>

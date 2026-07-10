@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BusinessCard } from "./BusinessCard";
+import { TiltCard } from "./TiltCard";
 import { Icon } from "./Icon";
 import { businessPath } from "@/lib/seo";
 import { listFeaturedBusinesses, primaryPhoto } from "@/lib/queries";
@@ -30,14 +31,16 @@ export async function FeaturedBusinesses() {
           const region = b.city?.state?.code ?? b.city?.state?.name ?? "";
           return (
             <div key={b.id} className="reveal" style={{ "--i": i } as React.CSSProperties}>
-              <BusinessCard
-                business={b}
-                categorySlug={b.category?.slug ?? "local-shops"}
-                href={businessPath(b)}
-                photoUrl={photo?.url}
-                photoAlt={photo?.alt}
-                cityLabel={b.city ? `${b.city.name}, ${region}` : undefined}
-              />
+              <TiltCard>
+                <BusinessCard
+                  business={b}
+                  categorySlug={b.category?.slug ?? "local-shops"}
+                  href={businessPath(b)}
+                  photoUrl={photo?.url}
+                  photoAlt={photo?.alt}
+                  cityLabel={b.city ? `${b.city.name}, ${region}` : undefined}
+                />
+              </TiltCard>
             </div>
           );
         })}

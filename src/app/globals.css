@@ -504,6 +504,25 @@
     transform: translateX(-50%);
   }
 }
+@keyframes billboard-idle3d {
+  0%,
+  100% {
+    transform: perspective(1100px) rotateY(-7deg) rotateX(2.5deg);
+  }
+  50% {
+    transform: perspective(1100px) rotateY(7deg) rotateX(-2.5deg);
+  }
+}
+/* Cursor-follow spotlight used on the advertise plate */
+@keyframes scroll-progress-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 6px rgba(240, 168, 24, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 14px rgba(240, 168, 24, 0.9);
+  }
+}
 
 @layer components {
   /* Sign assembly: outer = entrance drop + idle sway; inner = pointer 3D tilt */
@@ -518,6 +537,12 @@
     transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
     transition: transform 300ms var(--ease-warm);
     will-change: transform;
+  }
+  /* Touch devices can't hover — give the sign its own slow 3D drift */
+  @media (hover: none) {
+    .billboard-tilt {
+      animation: billboard-idle3d 10s ease-in-out 1.6s infinite;
+    }
   }
   /* Shine sweep clipped to the logo's own silhouette via mask */
   .billboard-shine {

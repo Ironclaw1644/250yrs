@@ -67,6 +67,11 @@ function LoginForm() {
         {err && (
           <p className="rounded-md bg-barn/10 px-3 py-2 text-small text-barn">{err}</p>
         )}
+        <div className="text-right">
+          <Link href="/reset" className="text-small font-semibold text-barn hover:underline">
+            Forgot password?
+          </Link>
+        </div>
         <button type="submit" disabled={loading} className="btn btn-primary w-full">
           <Icon name="right-to-bracket" /> {loading ? "Signing in…" : "Sign in"}
         </button>

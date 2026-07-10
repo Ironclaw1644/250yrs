@@ -67,11 +67,32 @@ export default async function AccountPage() {
         </div>
       </div>
 
-      <form action="/auth/signout" method="post" className="mt-8">
-        <button type="submit" className="btn btn-secondary">
-          <Icon name="right-to-bracket" /> Sign out
-        </button>
-      </form>
+      {profile?.role === "admin" && (
+        <div className="card mt-6 flex flex-wrap items-center justify-between gap-4 p-6">
+          <div>
+            <h2 className="flex items-center gap-2 font-heading text-h3 text-navy">
+              <Icon name="shield-halved" className="text-gold" /> Staff portal
+            </h2>
+            <p className="mt-1 text-small text-stone">
+              Moderate listings, edit pages, and manage users.
+            </p>
+          </div>
+          <Link href="/admin" className="btn btn-primary">
+            <Icon name="arrow-right" /> Open admin
+          </Link>
+        </div>
+      )}
+
+      <div className="mt-8 flex flex-wrap items-center gap-3">
+        <Link href="/account/password" className="btn btn-secondary">
+          <Icon name="gear" /> Change password
+        </Link>
+        <form action="/auth/signout" method="post">
+          <button type="submit" className="btn btn-secondary">
+            <Icon name="right-to-bracket" /> Sign out
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -86,19 +86,19 @@ export function HomeHero({ geo }: { geo: GeoTree }) {
         />
       ))}
 
-      <div className="container-shell relative py-14 lg:py-10">
-        {/* ===== THE BILLBOARD (desktop) ===== */}
-        <div className="hidden justify-center lg:flex">
+      <div className="container-shell relative pb-10 pt-6 lg:py-10">
+        {/* ===== THE BILLBOARD (every screen) ===== */}
+        <div className="flex justify-center">
           <div className="billboard-outer relative">
             {/* hanging cables */}
-            <div className="absolute -top-24 left-1/2 flex w-[19rem] -translate-x-1/2 justify-between">
-              <span className="h-24 w-[3px] rounded-full bg-gradient-to-b from-gold/0 via-gold/60 to-gold" />
-              <span className="h-24 w-[3px] rounded-full bg-gradient-to-b from-gold/0 via-gold/60 to-gold" />
+            <div className="absolute -top-12 left-1/2 flex w-[10.5rem] -translate-x-1/2 justify-between sm:-top-16 sm:w-[14rem] lg:-top-24 lg:w-[19rem]">
+              <span className="h-12 w-[2px] rounded-full bg-gradient-to-b from-gold/0 via-gold/60 to-gold sm:h-16 lg:h-24 lg:w-[3px]" />
+              <span className="h-12 w-[2px] rounded-full bg-gradient-to-b from-gold/0 via-gold/60 to-gold sm:h-16 lg:h-24 lg:w-[3px]" />
             </div>
             <div ref={tiltRef} className="billboard-tilt relative">
               {/* breathing spotlight */}
               <div
-                className="absolute -inset-16 -z-10 motion-safe:animate-[glow-pulse_5s_ease-in-out_infinite]"
+                className="absolute -inset-10 -z-10 motion-safe:animate-[glow-pulse_5s_ease-in-out_infinite] lg:-inset-16"
                 style={{
                   background:
                     "radial-gradient(closest-side, rgba(240,168,24,0.35), rgba(240,168,24,0.12) 55%, transparent 75%)",
@@ -108,7 +108,7 @@ export function HomeHero({ geo }: { geo: GeoTree }) {
               <img
                 src={brand.logo}
                 alt={brand.name}
-                className="w-[clamp(20rem,34vw,30rem)] drop-shadow-[0_30px_60px_rgba(6,18,29,0.65)]"
+                className="w-[clamp(15rem,72vw,30rem)] drop-shadow-[0_30px_60px_rgba(6,18,29,0.65)] lg:w-[clamp(20rem,34vw,30rem)]"
               />
               <span
                 className="billboard-shine"
@@ -119,7 +119,7 @@ export function HomeHero({ geo }: { geo: GeoTree }) {
         </div>
 
         {/* ===== Copy + finder ===== */}
-        <div className="mt-0 max-w-3xl lg:mx-auto lg:mt-8 lg:max-w-4xl lg:text-center">
+        <div className="mx-auto mt-8 max-w-3xl text-center lg:max-w-4xl">
           <h1
             className="stamp reveal text-4xl leading-tight text-cream sm:text-5xl lg:text-[3.4rem]"
             style={{ "--i": 1 } as React.CSSProperties}
@@ -135,7 +135,7 @@ export function HomeHero({ geo }: { geo: GeoTree }) {
             </Editable>
           </p>
           <p
-            className="reveal mt-4 max-w-xl text-lead text-cloud/90 lg:mx-auto"
+            className="reveal mx-auto mt-4 max-w-xl text-lead text-cloud/90"
             style={{ "--i": 3 } as React.CSSProperties}
           >
             <Editable id="copy.home.hero.support">
@@ -152,7 +152,7 @@ export function HomeHero({ geo }: { geo: GeoTree }) {
         </div>
 
         <div
-          className="reveal mt-5 flex flex-wrap items-center gap-2 lg:justify-center"
+          className="reveal mt-5 flex flex-wrap items-center justify-center gap-2"
           style={{ "--i": 5 } as React.CSSProperties}
         >
           <span className="font-sans text-small font-bold text-cloud/80">Popular:</span>

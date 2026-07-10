@@ -4,8 +4,10 @@
     {
       "name": "taw",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"],
-      "port": 3000
+      "runtimeArgs": [
+        "dev"
+      ],
+      "autoPort": true
     }
   ]
 }
