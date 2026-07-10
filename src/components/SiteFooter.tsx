@@ -15,6 +15,7 @@ export function SiteFooter() {
           <h4 className="eyebrow !text-gold">Explore</h4>
           <ul className="mt-3 space-y-2 text-small">
             <li><Link href="/us" className="hover:text-cloud">Browse the USA</Link></li>
+            <li><Link href="/tv-spots" className="hover:text-cloud">TV Spots</Link></li>
             <li><Link href="/how-it-works" className="hover:text-cloud">How it works</Link></li>
             <li><Link href="/about" className="hover:text-cloud">About us</Link></li>
             <li><Link href="/contact" className="hover:text-cloud">Contact</Link></li>

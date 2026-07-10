@@ -165,14 +165,14 @@ export function VideoStudio({
             </p>
             <p className="mt-1 font-heading text-5xl font-bold text-cream">
               {balance}
-              <span className="ml-2 text-lg font-semibold text-cream/70">
+              <span className="ml-2 text-lg font-semibold text-cream">
                 credit{balance === 1 ? "" : "s"}
               </span>
             </p>
           </div>
           <Icon name="tv" className="text-5xl text-gold/70" />
         </div>
-        <p className="mt-3 max-w-lg text-small text-cream/90">
+        <p className="mt-3 max-w-lg text-small text-cream">
           Credits pay for AI-made commercials: <strong className="text-gold">Motion</strong> spots
           cost {VIDEO_COSTS.ai_motion} credit, <strong className="text-gold">Premium AI</strong>{" "}
           spots cost {VIDEO_COSTS.ai_premium}. Uploading your own video is always free.
@@ -199,7 +199,7 @@ export function VideoStudio({
                   )}
                 </p>
                 <p className="font-heading text-2xl font-bold text-gold">{formatUsd(p.amountCents)}</p>
-                <p className="text-xs text-cream/70">{p.blurb}</p>
+                <p className="text-small text-cream">{p.blurb}</p>
               </button>
             ),
           )}

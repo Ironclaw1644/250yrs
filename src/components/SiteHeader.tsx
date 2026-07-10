@@ -9,6 +9,7 @@ import { ScrollProgress } from "./ScrollProgress";
 
 const LEFT_NAV = [
   { href: "/us", label: "Find Businesses" },
+  { href: "/tv-spots", label: "TV Spots" },
   { href: "/how-it-works", label: "How It Works" },
 ];
 const RIGHT_NAV = [

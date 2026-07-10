@@ -3,6 +3,7 @@ import { CategoryTicker } from "@/components/CategoryTicker";
 import { CategoryCircle } from "@/components/CategoryCircle";
 import { FeaturedBusinesses } from "@/components/FeaturedBusinesses";
 import { AdvertisePanel } from "@/components/AdvertisePanel";
+import { TvSpotsShowcase } from "@/components/TvSpotsShowcase";
 import { TrustBar } from "@/components/TrustBar";
 import { Reveal } from "@/components/Reveal";
 import { CATEGORIES } from "@/lib/brand";
@@ -17,21 +18,28 @@ export default async function HomePage() {
 
       <CategoryTicker />
 
-      {/* Circular photo category row */}
+      {/* Circular photo category row — one horizontal swipe strip on mobile.
+          overflow-y-hidden is load-bearing: overflow-x-auto alone computes
+          overflow-y to auto, which turned this into a vertical scroll box
+          that clipped the circle tops. */}
       <section className="paper-grain border-b border-navy/10">
-        <div className="container-shell py-10">
-          <div className="flex gap-4 overflow-x-auto pb-2 sm:flex-wrap sm:justify-center sm:overflow-visible">
-            {CATEGORIES.map((c, i) => (
-              <Reveal key={c.slug} delayMs={(i % 7) * 60}>
+        <Reveal className="container-shell py-10">
+          <div className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-hidden pb-2 pt-3 sm:flex-wrap sm:justify-center sm:overflow-visible sm:pt-0">
+            {CATEGORIES.map((c) => (
+              <div key={c.slug} className="shrink-0 snap-start">
                 <CategoryCircle category={c} href={`/categories/${c.slug}`} />
-              </Reveal>
+              </div>
             ))}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       <Reveal>
         <FeaturedBusinesses />
+      </Reveal>
+
+      <Reveal>
+        <TvSpotsShowcase />
       </Reveal>
 
       <Reveal>

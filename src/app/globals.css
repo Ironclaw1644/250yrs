@@ -77,9 +77,10 @@
   --ease-warm: cubic-bezier(0.22, 0.61, 0.36, 1);
 
   --tex-halftone: radial-gradient(rgba(12, 33, 53, 0.06) 1px, transparent 1.4px);
+  /* Kept faint on purpose: this tiles BEHIND text on every .sign-plate. */
   --tex-star: radial-gradient(
     circle at center,
-    rgba(240, 168, 24, 0.5) 0 40%,
+    rgba(240, 168, 24, 0.14) 0 40%,
     transparent 45%
   );
 
@@ -230,8 +231,10 @@
   }
   .sign-plate h1,
   .sign-plate h2,
-  .sign-plate h3 {
+  .sign-plate h3,
+  .sign-plate .stamp {
     color: var(--cream);
+    text-shadow: 0 2px 8px rgba(6, 18, 29, 0.55);
   }
 
   .sign-plate-3d {
@@ -378,6 +381,15 @@
 }
 
 @layer utilities {
+  /* Horizontal swipe strips: keep the scroll, hide the chrome. */
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   .reveal {
     opacity: 0;
     animation: reveal-up 420ms var(--ease-warm) both;

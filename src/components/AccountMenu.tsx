@@ -55,9 +55,8 @@ export function AccountMenu() {
     ...(me.role === "business_owner" || me.role === "admin"
       ? [{ href: "/dashboard", label: "Business dashboard", icon: "store" }]
       : []),
-    ...(me.role === "admin"
-      ? [{ href: "/admin", label: "Staff portal", icon: "shield-halved" }]
-      : []),
+    // Staff portal is deliberately NOT in the menu — admins reach /admin
+    // from the card on their account page.
   ];
 
   return (

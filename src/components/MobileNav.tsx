@@ -8,6 +8,7 @@ import { useMe } from "@/lib/useMe";
 
 const LINKS = [
   { href: "/us", label: "Find Businesses", icon: "magnifying-glass" },
+  { href: "/tv-spots", label: "TV Spots", icon: "tv" },
   { href: "/how-it-works", label: "How It Works", icon: "circle-info" },
   { href: "/about", label: "About Us", icon: "flag" },
   { href: "/contact", label: "Contact", icon: "envelope" },
@@ -31,9 +32,6 @@ export function MobileNav() {
         { href: "/account/notifications", label: "Notifications", icon: "bell", badge: me.unread },
         ...(me.role === "business_owner" || me.role === "admin"
           ? [{ href: "/dashboard", label: "Business Dashboard", icon: "store", badge: 0 }]
-          : []),
-        ...(me.role === "admin"
-          ? [{ href: "/admin", label: "Staff Portal", icon: "shield-halved", badge: 0 }]
           : []),
       ]
     : [{ href: "/login", label: "Sign In", icon: "right-to-bracket", badge: 0 }];
