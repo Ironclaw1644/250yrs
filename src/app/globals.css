@@ -504,13 +504,18 @@
     transform: translateX(-50%);
   }
 }
+/* Starts and ends neutral so it picks up exactly where the drop settles —
+   otherwise the sign snaps to the first keyframe when this kicks in. */
 @keyframes billboard-idle3d {
   0%,
   100% {
-    transform: perspective(1100px) rotateY(-7deg) rotateX(2.5deg);
+    transform: perspective(1100px) rotateY(0deg) rotateX(0deg);
   }
-  50% {
+  25% {
     transform: perspective(1100px) rotateY(7deg) rotateX(-2.5deg);
+  }
+  75% {
+    transform: perspective(1100px) rotateY(-7deg) rotateX(2.5deg);
   }
 }
 /* Cursor-follow spotlight used on the advertise plate */
