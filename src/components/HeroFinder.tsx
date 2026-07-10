@@ -19,7 +19,10 @@ export function HeroFinder({
   categories: Category[];
 }) {
   const router = useRouter();
-  const [countryId, setCountryId] = useState(geo.countries[0]?.id ?? "");
+  // Default to the home market, not the first country alphabetically.
+  const [countryId, setCountryId] = useState(
+    (geo.countries.find((c) => c.slug === "us") ?? geo.countries[0])?.id ?? "",
+  );
   const [stateId, setStateId] = useState("");
   const [cityId, setCityId] = useState("");
   const [category, setCategory] = useState("");
