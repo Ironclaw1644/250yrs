@@ -204,26 +204,31 @@ export function HoursEditor({
           const h = byDay.get(d);
           const closed = h ? h.is_closed || !h.open_time : d === 0;
           return (
-            <div key={d} className="grid grid-cols-[6rem_1fr_1fr_auto] items-center gap-3">
+            <div
+              key={d}
+              className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1.5 border-b border-navy/10 pb-3 last:border-0 last:pb-0 sm:grid-cols-[6rem_1fr_1fr_auto] sm:items-center sm:gap-3 sm:border-0 sm:pb-0"
+            >
               <span className="font-sans text-small font-bold text-navy">
                 {DAY_NAMES[d]}
               </span>
-              <input
-                type="time"
-                name={`open_${d}`}
-                defaultValue={h?.open_time?.slice(0, 5) ?? (closed ? "" : "09:00")}
-                className="h-10 rounded-md border-[1.5px] border-navy/15 bg-linen px-2 text-navy"
-              />
-              <input
-                type="time"
-                name={`close_${d}`}
-                defaultValue={h?.close_time?.slice(0, 5) ?? (closed ? "" : "17:00")}
-                className="h-10 rounded-md border-[1.5px] border-navy/15 bg-linen px-2 text-navy"
-              />
-              <label className="flex items-center gap-1.5 text-small text-stone">
+              <label className="flex items-center gap-1.5 justify-self-end text-small text-stone sm:order-last">
                 <input type="checkbox" name={`closed_${d}`} defaultChecked={closed} className="h-4 w-4 accent-barn" />
                 Closed
               </label>
+              <div className="col-span-2 grid grid-cols-2 gap-2 sm:contents">
+                <input
+                  type="time"
+                  name={`open_${d}`}
+                  defaultValue={h?.open_time?.slice(0, 5) ?? (closed ? "" : "09:00")}
+                  className="h-10 min-w-0 rounded-md border-[1.5px] border-navy/15 bg-linen px-2 text-navy"
+                />
+                <input
+                  type="time"
+                  name={`close_${d}`}
+                  defaultValue={h?.close_time?.slice(0, 5) ?? (closed ? "" : "17:00")}
+                  className="h-10 min-w-0 rounded-md border-[1.5px] border-navy/15 bg-linen px-2 text-navy"
+                />
+              </div>
             </div>
           );
         })}

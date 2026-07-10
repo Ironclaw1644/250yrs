@@ -56,6 +56,15 @@ import {
   faClipboardList,
   faBan,
   faCheck,
+  faBell,
+  faUser,
+  faFilm,
+  faCoins,
+  faArrowTrendUp,
+  faArrowTrendDown,
+  faPlay,
+  faVideo,
+  faTv,
 } from "@fortawesome/free-solid-svg-icons";
 
 const REGISTRY: Record<string, IconDefinition> = {
@@ -114,6 +123,15 @@ const REGISTRY: Record<string, IconDefinition> = {
   "clipboard-list": faClipboardList,
   ban: faBan,
   check: faCheck,
+  bell: faBell,
+  user: faUser,
+  film: faFilm,
+  coins: faCoins,
+  "arrow-trend-up": faArrowTrendUp,
+  "arrow-trend-down": faArrowTrendDown,
+  play: faPlay,
+  video: faVideo,
+  tv: faTv,
 };
 
 /**

@@ -35,7 +35,7 @@
   --cream: #f2e7be;
   --linen: #ece1c6;
   --char: #1a1712;
-  --stone: #6e675a;
+  --stone: #5b5344;
 
   /* Dark (admin) surfaces */
   --night: var(--navy-deep);
@@ -65,7 +65,7 @@
   --cream-rgb: 242 231 190;
   --linen-rgb: 236 225 198;
   --char-rgb: 26 23 18;
-  --stone-rgb: 110 103 90;
+  --stone-rgb: 91 83 68;
   --slate-1-rgb: 16 35 56;
   --slate-2-rgb: 23 48 75;
   --hairline-rgb: 36 64 92;

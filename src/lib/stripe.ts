@@ -1,5 +1,6 @@
 import "server-only";
 import Stripe from "stripe";
+import type { CreditPack } from "./video-plans";
 
 const secret = process.env.STRIPE_SECRET_KEY;
 
@@ -27,4 +28,11 @@ export const PRICES: Record<"monthly" | "annual", string | undefined> = {
 export const PLAN_LABEL: Record<"monthly" | "annual", string> = {
   monthly: "$19.99 / month",
   annual: "$100 / year",
+};
+
+/** TV-spot credit-pack price ids (created by scripts/stripe-seed-prices.ts). */
+export const CREDIT_PACK_PRICES: Record<CreditPack, string | undefined> = {
+  starter: process.env.STRIPE_PRICE_VIDEO_STARTER,
+  pro: process.env.STRIPE_PRICE_VIDEO_PRO,
+  studio: process.env.STRIPE_PRICE_VIDEO_STUDIO,
 };

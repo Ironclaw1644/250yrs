@@ -12,6 +12,7 @@ const TABS = [
   { seg: "menu", label: "Menu", icon: "utensils" },
   { seg: "services", label: "Services", icon: "list-check" },
   { seg: "coupons", label: "Coupons", icon: "tag" },
+  { seg: "videos", label: "TV Ads", icon: "tv" },
   { seg: "analytics", label: "Analytics", icon: "chart-line" },
   { seg: "advertise", label: "Advertise", icon: "bullhorn" },
 ];

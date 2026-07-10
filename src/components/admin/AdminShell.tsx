@@ -6,11 +6,25 @@ import { usePathname } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { brand } from "@/lib/brand";
 
-const NAV = [
+export interface AdminBadges {
+  reviews?: number;
+  videos?: number;
+}
+
+interface NavItem {
+  href: string;
+  label: string;
+  icon: string;
+  exact?: boolean;
+  badgeKey?: keyof AdminBadges;
+}
+
+const NAV: NavItem[] = [
   { href: "/admin", label: "Dashboard", icon: "gauge-high", exact: true },
   { href: "/admin/businesses", label: "Businesses", icon: "store" },
   { href: "/admin/users", label: "Users", icon: "users" },
-  { href: "/admin/reviews", label: "Reviews", icon: "star" },
+  { href: "/admin/reviews", label: "Reviews", icon: "star", badgeKey: "reviews" },
+  { href: "/admin/videos", label: "TV Spots", icon: "film", badgeKey: "videos" },
   { href: "/admin/edit", label: "Edit Pages", icon: "pen-to-square" },
   { href: "/admin/settings", label: "Settings", icon: "gear" },
   { href: "/admin/audit", label: "Audit Log", icon: "clipboard-list" },
@@ -18,9 +32,11 @@ const NAV = [
 
 export function AdminShell({
   email,
+  badges = {},
   children,
 }: {
   email: string | null;
+  badges?: AdminBadges;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -30,6 +46,7 @@ export function AdminShell({
     <nav className="flex flex-col gap-1">
       {NAV.map((n) => {
         const active = n.exact ? pathname === n.href : pathname.startsWith(n.href);
+        const badge = n.badgeKey ? badges[n.badgeKey] : undefined;
         return (
           <Link
             key={n.href}
@@ -43,6 +60,11 @@ export function AdminShell({
           >
             <Icon name={n.icon} fixedWidth className={active ? "text-gold" : ""} />
             {n.label}
+            {(badge ?? 0) > 0 && (
+              <span className="ml-auto rounded-full bg-gold px-2 py-0.5 text-[11px] font-bold normal-case tracking-normal text-navy-deep">
+                {badge}
+              </span>
+            )}
           </Link>
         );
       })}

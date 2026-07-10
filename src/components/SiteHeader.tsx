@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { SearchBar } from "./SearchBar";
 import { Icon } from "./Icon";
-import { HeaderAuth } from "./HeaderAuth";
+import { AccountMenu } from "./AccountMenu";
+import { NotificationsBell } from "./NotificationsBell";
 import { HeaderLogo } from "./HeaderLogo";
 import { MobileNav } from "./MobileNav";
 import { ScrollProgress } from "./ScrollProgress";
@@ -60,7 +61,8 @@ export function SiteHeader() {
           >
             <Icon name="magnifying-glass" className="text-lg" />
           </Link>
-          <HeaderAuth />
+          <NotificationsBell />
+          <AccountMenu />
           <MobileNav />
         </div>
       </div>

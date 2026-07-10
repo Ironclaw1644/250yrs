@@ -1,7 +1,7 @@
 # Brand assets — True American Where
 
 The client's official logos, pulled from the Google Drive folder
-"trueamericanwhere" (owner: johnsalsberry1980@gmail.com) and committed here:
+"trueamericanwhere" (owner: hello@trueamericanwear.com) and committed here:
 
 | File | What it is | Use in the app |
 |---|---|---|

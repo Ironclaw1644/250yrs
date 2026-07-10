@@ -4,7 +4,8 @@ import type { User } from "@supabase/supabase-js";
 import { createServerSupabase, authConfigured } from "./supabase-server";
 import { db } from "./supabase";
 
-export type Role = "customer" | "business_owner" | "admin";
+import type { Role } from "./auth-types";
+export type { Role } from "./auth-types";
 export interface Profile {
   id: string;
   role: Role;

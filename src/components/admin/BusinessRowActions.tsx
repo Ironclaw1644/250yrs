@@ -8,6 +8,7 @@ import {
   setBusinessFeatured,
   deleteBusiness,
 } from "@/lib/actions/admin";
+import { useToast } from "./Toast";
 
 export function BusinessRowActions({
   id,
@@ -19,13 +20,15 @@ export function BusinessRowActions({
   featured: boolean;
 }) {
   const router = useRouter();
+  const toast = useToast();
   const [pending, start] = useTransition();
   const [confirming, setConfirming] = useState(false);
 
-  function run(fn: () => Promise<{ ok: boolean; error?: string }>) {
+  function run(fn: () => Promise<{ ok: boolean; error?: string }>, done: string) {
     start(async () => {
       const res = await fn();
-      if (!res.ok) alert(res.error ?? "Action failed");
+      if (res.ok) toast("success", done);
+      else toast("error", res.error ?? "Action failed");
       router.refresh();
     });
   }
@@ -36,7 +39,7 @@ export function BusinessRowActions({
         <button
           type="button"
           disabled={pending}
-          onClick={() => run(() => setBusinessStatus(id, "published"))}
+          onClick={() => run(() => setBusinessStatus(id, "published"), "Business published.")}
           className="rounded bg-success/20 px-2 py-1 text-xs font-semibold uppercase text-success hover:bg-success/30"
           title="Publish"
         >
@@ -46,7 +49,7 @@ export function BusinessRowActions({
         <button
           type="button"
           disabled={pending}
-          onClick={() => run(() => setBusinessStatus(id, "suspended"))}
+          onClick={() => run(() => setBusinessStatus(id, "suspended"), "Business suspended.")}
           className="rounded bg-barn/20 px-2 py-1 text-xs font-semibold uppercase text-barn hover:bg-barn/30"
           title="Suspend (takedown)"
         >
@@ -56,7 +59,7 @@ export function BusinessRowActions({
       <button
         type="button"
         disabled={pending}
-        onClick={() => run(() => setBusinessFeatured(id, !featured))}
+        onClick={() => run(() => setBusinessFeatured(id, !featured), featured ? "Removed from featured." : "Business featured.")}
         className={`rounded px-2 py-1 text-xs font-semibold uppercase ${
           featured
             ? "bg-gold/30 text-gold hover:bg-gold/40"
@@ -71,7 +74,7 @@ export function BusinessRowActions({
           <button
             type="button"
             disabled={pending}
-            onClick={() => run(() => deleteBusiness(id))}
+            onClick={() => run(() => deleteBusiness(id), "Business deleted.")}
             className="rounded bg-barn px-2 py-1 text-xs font-bold uppercase text-cloud"
           >
             Confirm delete

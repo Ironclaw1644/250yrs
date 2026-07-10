@@ -44,9 +44,38 @@ async function main() {
   const monthly = await priceFor("taw_ad_monthly", 1999, "month");
   const annual = await priceFor("taw_ad_annual", 10000, "year");
 
+  // TV-spot credit packs: one Product + three one-time prices.
+  const tvExisting = await stripe.products.search({
+    query: `name:'True American Where — TV Spots'`,
+  });
+  const tvProduct =
+    tvExisting.data[0] ??
+    (await stripe.products.create({
+      name: "True American Where — TV Spots",
+      description: "Video advertisement credits — upload your own spot or create one with AI.",
+    }));
+
+  async function oneTimePriceFor(lookupKey: string, amount: number) {
+    const found = await stripe.prices.list({ lookup_keys: [lookupKey], limit: 1 });
+    if (found.data[0]) return found.data[0];
+    return stripe.prices.create({
+      product: tvProduct.id,
+      currency: "usd",
+      unit_amount: amount,
+      lookup_key: lookupKey,
+    });
+  }
+
+  const starter = await oneTimePriceFor("taw_video_starter", 2900);
+  const pro = await oneTimePriceFor("taw_video_pro", 6900);
+  const studio = await oneTimePriceFor("taw_video_studio", 19900);
+
   console.log("\nAdd these to your env (and Vercel):");
   console.log(`STRIPE_PRICE_ADVERTISING_MONTHLY=${monthly.id}`);
   console.log(`STRIPE_PRICE_ADVERTISING_ANNUAL=${annual.id}`);
+  console.log(`STRIPE_PRICE_VIDEO_STARTER=${starter.id}`);
+  console.log(`STRIPE_PRICE_VIDEO_PRO=${pro.id}`);
+  console.log(`STRIPE_PRICE_VIDEO_STUDIO=${studio.id}`);
 }
 
 main().catch((e) => {

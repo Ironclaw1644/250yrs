@@ -228,6 +228,31 @@ export async function getPhotos(businessId: string): Promise<BusinessPhoto[]> {
   }, []);
 }
 
+export interface AdVideo {
+  id: string;
+  url: string;
+  thumbnail_url: string | null;
+  title: string | null;
+  duration_seconds: number | null;
+}
+
+/** The business's live TV spot (approved ad video), if it has one. */
+export async function getReadyAdVideo(businessId: string): Promise<AdVideo | null> {
+  return safe(async () => {
+    const { data } = await db()
+      .from("business_videos")
+      .select("id,url,thumbnail_url,title,duration_seconds")
+      .eq("business_id", businessId)
+      .eq("is_ad", true)
+      .eq("status", "ready")
+      .not("url", "is", null)
+      .order("sort_order")
+      .limit(1)
+      .maybeSingle();
+    return (data as AdVideo) ?? null;
+  }, null);
+}
+
 export interface MenuSectionWithItems extends MenuSection {
   items: MenuItem[];
 }

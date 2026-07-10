@@ -43,6 +43,17 @@ export default async function AccountPage() {
         </div>
         <div className="card flex flex-col p-6">
           <h2 className="flex items-center gap-2 font-heading text-h3 text-navy">
+            <Icon name="bell" className="text-gold" /> Notifications
+          </h2>
+          <p className="mt-2 text-small text-stone">
+            Reviews, replies, and updates about your account.
+          </p>
+          <Link href="/account/notifications" className="btn btn-secondary mt-4">
+            <Icon name="bell" /> View notifications
+          </Link>
+        </div>
+        <div className="card flex flex-col p-6 sm:col-span-2">
+          <h2 className="flex items-center gap-2 font-heading text-h3 text-navy">
             <Icon name="bullhorn" className="text-gold" /> For business owners
           </h2>
           {isOwner ? (

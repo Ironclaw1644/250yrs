@@ -7,6 +7,7 @@ import {
   getHours,
   getMenu,
   getPhotos,
+  getReadyAdVideo,
   getVisibleReviews,
 } from "@/lib/queries";
 import { CATEGORY_BY_SLUG } from "@/lib/brand";
@@ -27,6 +28,8 @@ import { MenuList } from "@/components/MenuList";
 import { ActionBar } from "@/components/ActionBar";
 import { PhotoGallery } from "@/components/PhotoGallery";
 import { ReviewForm } from "@/components/ReviewForm";
+import { ReportReviewButton } from "@/components/ReportReviewButton";
+import { TvSpot } from "@/components/TvSpot";
 import { OwnerResponseForm } from "@/components/OwnerResponseForm";
 import { Icon } from "@/components/Icon";
 
@@ -64,12 +67,13 @@ export default async function BusinessPage({ params }: Params) {
   const b = await getBusinessBySlugFull(business);
   if (!b) notFound();
 
-  const [hours, menu, reviews, photos, viewer] = await Promise.all([
+  const [hours, menu, reviews, photos, viewer, adVideo] = await Promise.all([
     getHours(b.id),
     getMenu(b.id),
     getVisibleReviews(b.id),
     getPhotos(b.id),
     getSessionUser(),
+    getReadyAdVideo(b.id),
   ]);
 
   // Non-blocking impression tracking (real listings only)
@@ -192,6 +196,13 @@ export default async function BusinessPage({ params }: Params) {
         </div>
       )}
 
+      {/* The business's TV commercial, when one is on air */}
+      {adVideo && (
+        <div className="mt-8">
+          <TvSpot businessId={b.id} video={adVideo} isDemo={b.is_demo} />
+        </div>
+      )}
+
       {/* Photo gallery strip */}
       {photos.length > 0 && (
         <section className="mt-8">
@@ -237,7 +248,10 @@ export default async function BusinessPage({ params }: Params) {
                 <ul className="space-y-4">
                   {reviews.map((r) => (
                     <li key={r.id} className="card p-5">
-                      <Stars rating={r.rating} showNumber={false} />
+                      <div className="flex items-start justify-between gap-3">
+                        <Stars rating={r.rating} showNumber={false} />
+                        <ReportReviewButton reviewId={r.id} signedIn={Boolean(viewer)} />
+                      </div>
                       {r.body && <p className="mt-2 text-char/90">{r.body}</p>}
                       {r.response_body ? (
                         <div className="mt-3 rounded-md bg-linen/70 p-3 text-small">
