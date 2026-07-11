@@ -65,6 +65,7 @@ import {
   faPlay,
   faVideo,
   faTv,
+  faChampagneGlasses,
 } from "@fortawesome/free-solid-svg-icons";
 
 const REGISTRY: Record<string, IconDefinition> = {
@@ -132,6 +133,7 @@ const REGISTRY: Record<string, IconDefinition> = {
   play: faPlay,
   video: faVideo,
   tv: faTv,
+  "champagne-glasses": faChampagneGlasses,
 };
 
 /**

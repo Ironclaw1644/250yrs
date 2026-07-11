@@ -36,6 +36,7 @@ export const CATEGORIES: Category[] = [
   { name: "Repair Shops", slug: "repair-shops", icon: "screwdriver-wrench", blurb: "Fix-it shops for auto, home & more" },
   { name: "Beauty Supply", slug: "beauty-supply", icon: "wand-magic-sparkles", blurb: "Hair, nails & beauty essentials" },
   { name: "Bakeries", slug: "bakeries", icon: "bread-slice", blurb: "Fresh bread, cakes & sweets" },
+  { name: "Nightclubs", slug: "nightclubs", icon: "champagne-glasses", blurb: "Live music, dancing & late nights" },
   { name: "Local & Mom-and-Pop", slug: "local-shops", icon: "store", blurb: "The shops that make a town" },
 ];
 
@@ -58,5 +59,6 @@ export const SCHEMA_TYPE_BY_CATEGORY: Record<string, string> = {
   "repair-shops": "AutoRepair",
   "beauty-supply": "HealthAndBeautyBusiness",
   bakeries: "Bakery",
+  nightclubs: "NightClub",
   "local-shops": "LocalBusiness",
 };
