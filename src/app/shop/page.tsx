@@ -1,29 +1,50 @@
 import type { Metadata } from "next";
-import { BundleSetCard } from "@/components/bundle-set-card";
+import Image from "next/image";
+
 import { FoundersIntakeForm } from "@/components/founders-intake-form";
-import { ProductCard } from "@/components/product-card";
 import { SectionHeading } from "@/components/section-heading";
+import { ShopGrid, type ShopGridItem } from "@/components/shop-grid";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { setProducts, standardProducts } from "@/lib/products";
+import { getActiveProducts } from "@/lib/store-queries";
+import { primaryImage } from "@/lib/store-types";
 import { absoluteUrl, createMetadata, siteName } from "@/lib/seo";
-import Image from "next/image";
+
+export const revalidate = 60;
 
 export const metadata: Metadata = createMetadata({
   title: "Shop Patriotic Shirts, Crewnecks & Hoodies",
   description:
-    "Shop the True American Wear 250th Year Collection of patriotic shirts, crewnecks, hoodies, and bundle sets inspired by America’s 250th anniversary.",
+    "Shop the True American Wear 250th Year Collection of patriotic shirts, crewnecks, hoodies, and bundle sets inspired by America's 250th anniversary.",
   path: "/shop",
 });
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  const products = await getActiveProducts();
+  const items: ShopGridItem[] = products.map((p) => {
+    const img = primaryImage(p);
+    return {
+      id: p.id,
+      slug: p.slug,
+      name: p.name,
+      subtitle: p.subtitle,
+      description: p.description,
+      badge: p.badge,
+      priceCents: p.price_cents,
+      imageUrl: img?.public_url ?? null,
+      imageAlt: img?.alt ?? p.name,
+      kind: p.category?.slug === "sets" ? "sets" : "garments",
+      soldOut: p.status === "sold",
+    };
+  });
+
   const collectionPageJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: `${siteName} Shop`,
     url: absoluteUrl("/shop"),
     description:
-      "Shop the True American Wear 250th Year Collection of patriotic shirts, crewnecks, hoodies, and bundle sets inspired by America’s 250th anniversary.",
+      "Shop the True American Wear 250th Year Collection of patriotic shirts, crewnecks, hoodies, and bundle sets inspired by America's 250th anniversary.",
   };
 
   return (
@@ -61,43 +82,12 @@ export default function ShopPage() {
               </div>
             </div>
 
-            <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
-              {standardProducts.map((product) => (
-                <ProductCard key={product.slug} product={product} />
-              ))}
-            </div>
-
-            <div className="space-y-6">
-              <SectionHeading
-                eyebrow="Bundle sets"
-                title="Complete the set."
-                description="Pair core pieces together for a stronger, full look built for the 250th year."
-              />
-
-              <div className="grid gap-6 lg:grid-cols-2 xl:grid-cols-3">
-                {setProducts.map((bundle) => (
-                  <BundleSetCard
-                    key={bundle.slug}
-                    title={bundle.bundleCardTitle ?? "Buy the Set"}
-                    name={bundle.name}
-                    price={bundle.price}
-                    accent={bundle.bundleCardAccent ?? bundle.badge}
-                    description={bundle.bundleCardDescription ?? [bundle.cardDescription]}
-                    images={bundle.bundleCardImages ?? []}
-                    primaryHref={`/shop/${bundle.slug}`}
-                    primaryLabel="Buy Now"
-                    secondaryHref={`/shop/${bundle.slug}#join-the-list`}
-                    secondaryLabel="Join the List"
-                  />
-                ))}
-              </div>
-            </div>
+            <ShopGrid items={items} />
 
             <div id="early-access">
               <FoundersIntakeForm
-                title="Want first access?"
-                description="Join the list for early access, first release details, and the next collection."
-                compact
+                title="Early access to new drops"
+                description="Join the list for first notice on new releases, restocks, and set drops."
               />
             </div>
           </div>

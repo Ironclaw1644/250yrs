@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import { joinWaitlist } from "@/lib/actions/waitlist";
 
 type FoundersIntakeFormProps = {
   productName?: string;
@@ -9,66 +10,48 @@ type FoundersIntakeFormProps = {
   compact?: boolean;
 };
 
-function buildMailtoLink({
-  to,
-  name,
-  email,
-  interest,
-  productName,
-}: {
-  to: string;
-  name: string;
-  email: string;
-  interest: string;
-  productName?: string;
-}) {
-  const subject = productName
-    ? `True American Wear inquiry — ${productName}`
-    : "True American Wear list inquiry";
-
-  const bodyLines = [
-    "True American Wear inquiry",
-    "",
-    `Name: ${name}`,
-    `Email: ${email}`,
-    `Interest: ${interest}`,
-    productName ? `Product: ${productName}` : undefined,
-    "",
-    "Please follow up with early access details.",
-  ].filter(Boolean);
-
-  const params = new URLSearchParams({
-    subject,
-    body: bodyLines.join("\n"),
-  });
-
-  return `mailto:${to}?${params.toString()}`;
-}
-
+/**
+ * The founders list, now a real backend: writes to the subscribers table and
+ * sends the FOUNDERS10 welcome email — no more mailto.
+ */
 export function FoundersIntakeForm({
   productName,
   title = "Join the list",
   description = "Be first in line for early access, product updates, and the first release.",
   compact = false,
 }: FoundersIntakeFormProps) {
-  const inbox = process.env.NEXT_PUBLIC_WAITLIST_EMAIL ?? "";
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [interest, setInterest] = useState(productName ?? "250th Year Collection");
+  const [company, setCompany] = useState(""); // honeypot
+  const [state, setState] = useState<"idle" | "sending" | "done">("idle");
+  const [err, setErr] = useState<string | null>(null);
 
-  const disabled = !inbox;
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setErr(null);
+    setState("sending");
+    const res = await joinWaitlist({ name, email, interest, company });
+    if (!res.ok) {
+      setState("idle");
+      setErr(res.error);
+      return;
+    }
+    setState("done");
+  }
 
-  const mailtoHref = useMemo(() => {
-    if (!inbox || !name || !email) return "#";
-
-    return buildMailtoLink({
-      to: inbox,
-      name,
-      email,
-      interest,
-      productName,
-    });
-  }, [email, inbox, interest, name, productName]);
+  if (state === "done") {
+    return (
+      <div className="rounded-[1.7rem] border border-brand-gold/25 bg-white/5 p-6 text-center sm:p-8">
+        <p className="eyebrow">You&apos;re on the list</p>
+        <h3 className="mt-2 font-display text-3xl text-brand-cream">Welcome to the founders list.</h3>
+        <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-white/64">
+          Check your inbox — your <span className="text-brand-gold">FOUNDERS10</span> welcome code
+          is on its way.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-[1.7rem] border border-white/8 bg-white/5 p-5 sm:p-6">
@@ -78,7 +61,17 @@ export function FoundersIntakeForm({
         <p className="max-w-2xl text-sm leading-6 text-white/64">{description}</p>
       </div>
 
-      <form className="mt-5 grid gap-4" action={mailtoHref} method="get">
+      <form className="mt-5 grid gap-4" onSubmit={submit}>
+        {/* Honeypot */}
+        <input
+          type="text"
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
+          className="hidden"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden
+        />
         <div className={`grid gap-4 ${compact ? "md:grid-cols-3" : "md:grid-cols-2"}`}>
           <label className="grid gap-2 text-sm text-white/70">
             <span>Name</span>
@@ -94,6 +87,7 @@ export function FoundersIntakeForm({
             <span>Email</span>
             <input
               type="email"
+              required
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               placeholder="you@example.com"
@@ -112,10 +106,17 @@ export function FoundersIntakeForm({
           </label>
         </div>
 
+        {err && <p className="text-sm text-brand-rust">{err}</p>}
+
         <div className="flex flex-wrap items-center gap-3">
-          <button type="submit" className="button-primary" disabled={disabled || !name || !email}>
-            Join now
+          <button
+            type="submit"
+            className="button-primary disabled:opacity-60"
+            disabled={state === "sending" || !email}
+          >
+            {state === "sending" ? "Joining…" : "Join now"}
           </button>
+          <p className="text-xs text-white/40">10% welcome code, no spam, unsubscribe anytime.</p>
         </div>
       </form>
     </div>

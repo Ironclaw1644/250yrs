@@ -31,20 +31,35 @@ export function SiteFooter() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-3 text-sm text-white/60 md:items-end">
-            <Link href="/shop" className="transition hover:text-brand-cream">
-              View the collection
-            </Link>
-            <Link href="/#founders-intake" className="transition hover:text-brand-cream">
-              Join the list
-            </Link>
-            <p className="text-xs uppercase tracking-[0.22em] text-brand-gold/70">
-              250th Year Collection
-            </p>
+          <div className="grid grid-cols-2 gap-8 text-sm text-white/60">
+            <div className="flex flex-col gap-2.5">
+              <p className="text-xs uppercase tracking-[0.22em] text-brand-gold/70">Shop</p>
+              <Link href="/shop" className="transition hover:text-brand-cream">
+                The collection
+              </Link>
+              <Link href="/cart" className="transition hover:text-brand-cream">
+                Your cart
+              </Link>
+              <Link href="/#collection" className="transition hover:text-brand-cream">
+                Featured pieces
+              </Link>
+            </div>
+            <div className="flex flex-col gap-2.5">
+              <p className="text-xs uppercase tracking-[0.22em] text-brand-gold/70">Company</p>
+              <Link href="/#campaign" className="transition hover:text-brand-cream">
+                The campaign
+              </Link>
+              <Link href="/#founders-intake" className="transition hover:text-brand-cream">
+                Join the list
+              </Link>
+            </div>
           </div>
         </div>
 
-        <div className="mt-8 border-t border-white/6 pt-5 text-center">
+        <div className="mt-8 flex flex-col items-center gap-2 border-t border-white/6 pt-5 text-center sm:flex-row sm:justify-between">
+          <p className="text-xs text-white/34">
+            © {new Date().getFullYear()} True American Wear · Secure checkout by Stripe
+          </p>
           <p className="text-xs text-white/34">
             Crafted by{" "}
             <a

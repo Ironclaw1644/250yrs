@@ -23,6 +23,13 @@ const config: Config = {
         display: ["var(--font-cormorant)", "serif"],
         sans: ["var(--font-geist-sans)", "sans-serif"],
       },
+      transitionTimingFunction: {
+        warm: "cubic-bezier(0.32, 0.72, 0, 1)",
+      },
+      transitionDuration: {
+        std: "250ms",
+        entrance: "450ms",
+      },
     },
   },
   plugins: [],
