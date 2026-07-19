@@ -7,12 +7,12 @@ export const brand = {
     "The neighborhood directory for real local businesses — food, hair, tires, markets, and more.",
   logo: "/brand/logo.png",
   favicon: "/brand/favicon.png",
-  email: "hello@trueamericanwear.com",
+  email: "hello@trueamericanwhere.com",
 } as const;
 
 export const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
-  "https://trueamericanwear.com";
+  "https://trueamericanwhere.vercel.app";
 
 export type Category = {
   name: string;

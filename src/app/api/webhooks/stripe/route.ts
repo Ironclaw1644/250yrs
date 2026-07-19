@@ -190,6 +190,16 @@ export async function POST(req: Request) {
   const sig = req.headers.get("stripe-signature");
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
 
+  // In production a verified signature is mandatory — an unverified payload
+  // could grant credits or publish listings. The parse-without-verify path
+  // exists only for local development against `stripe listen`-less setups.
+  if (process.env.NODE_ENV === "production" && (!secret || !sig)) {
+    return NextResponse.json(
+      { error: "Webhook signature required" },
+      { status: 400 },
+    );
+  }
+
   let event: Stripe.Event;
   try {
     event =

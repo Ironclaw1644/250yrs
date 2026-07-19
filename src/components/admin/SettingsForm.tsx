@@ -43,7 +43,7 @@ export function SettingsForm({
             <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-mist">
               Contact email
             </span>
-            <input name="contact_email" type="email" defaultValue={settings["site.contact_email"] ?? ""} placeholder="hello@trueamericanwear.com" className={inputCls} />
+            <input name="contact_email" type="email" defaultValue={settings["site.contact_email"] ?? ""} placeholder="hello@trueamericanwhere.com" className={inputCls} />
           </label>
           <label className="block">
             <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-mist">
