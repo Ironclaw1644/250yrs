@@ -120,65 +120,159 @@ export async function finalizeVideoUpload(
   return { ok: true };
 }
 
+const DAILY_GENERATION_CAP = 3;
+
 /**
- * "Create with AI": debits credits atomically and queues a production brief.
- * Rendering happens out-of-band (see scripts/render-video-worker.md) — this
- * action NEVER calls a generation API.
+ * "Create with AI" v2: preset-driven, fal.ai-powered. Debits credits
+ * atomically, assembles the prompt server-side from the chosen preset (no
+ * free-form prompts anywhere), and queues the render on fal with our webhook
+ * attached. Any failure after the debit refunds automatically.
  */
 export async function submitAiVideo(
   businessId: string,
-  style: AiStyle,
-  tagline: string,
-  details: string,
-  photoIds: string[],
+  input: {
+    style: AiStyle;
+    presetId: string;
+    photoId: string;
+    tagline: string;
+    details: string;
+  },
 ): Promise<Result> {
+  const { falConfigured, falSubmit, FAL_MODELS, FAL_DURATIONS } = await import("@/lib/fal");
+  const { PRESET_BY_ID, buildPrompt } = await import("@/lib/ad-presets");
+
   await requireUser();
   if (!(await ownsBusiness(businessId))) return { ok: false, error: "Not your business." };
+  if (!falConfigured)
+    return { ok: false, error: "The studio is warming up — check back shortly." };
+  const { style, presetId, photoId } = input;
   const cost = VIDEO_COSTS[style];
   if (!cost) return { ok: false, error: "Pick a production style." };
-  if (style === "ai_motion" && photoIds.length === 0)
-    return { ok: false, error: "Pick at least one photo for a Motion spot." };
+  const preset = PRESET_BY_ID[presetId];
+  if (!preset) return { ok: false, error: "Pick an ad style." };
+  if (!photoId) return { ok: false, error: "Pick the photo for this ad." };
 
   const svc = db();
+
+  // Guardrail: cap generations per business per day (cost control).
+  const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { count: todays } = await svc
+    .from("business_videos")
+    .select("id", { count: "exact", head: true })
+    .eq("business_id", businessId)
+    .in("source", ["ai_motion", "ai_premium"])
+    .gte("created_at", dayAgo);
+  if ((todays ?? 0) >= DAILY_GENERATION_CAP)
+    return {
+      ok: false,
+      error: `Studio limit reached (${DAILY_GENERATION_CAP} spots per day) — try again tomorrow.`,
+    };
+
+  // The photo must belong to this business.
+  const { data: photo } = await svc
+    .from("business_photos")
+    .select("url")
+    .eq("id", photoId)
+    .eq("business_id", businessId)
+    .maybeSingle();
+  if (!photo?.url) return { ok: false, error: "That photo isn't in your gallery." };
+
+  const { data: biz } = await svc
+    .from("businesses")
+    .select("owner_id, name, city:cities(name)")
+    .eq("id", businessId)
+    .maybeSingle();
+  const cityName =
+    (biz as { city?: { name?: string } } | null)?.city?.name ?? "";
+
   const { data: spent, error: rpcError } = await svc.rpc("spend_video_credits", {
     p_business_id: businessId,
     p_cost: cost,
-    p_reason: `spend:${style}`,
+    p_reason: `spend:${style}:${presetId}`,
   });
   if (rpcError) return { ok: false, error: rpcError.message };
   if (!spent)
     return { ok: false, error: "Not enough credits — grab a pack above and try again." };
 
-  const { data: biz } = await svc
-    .from("businesses")
-    .select("owner_id, name")
-    .eq("id", businessId)
-    .maybeSingle();
-
-  const { error } = await svc.from("business_videos").insert({
-    business_id: businessId,
-    url: null,
-    title: `${biz?.name ?? "Business"} — ${style === "ai_motion" ? "Motion" : "Premium"} spot`,
-    is_ad: true,
-    status: "pending",
-    source: style,
-    credits_spent: cost,
-    brief: {
-      style,
-      tagline: tagline.trim().slice(0, 140),
-      details: details.trim().slice(0, 1000),
-      photo_ids: photoIds.slice(0, 8),
-    },
-  });
-  if (error) {
-    // Refund the debit if the brief could not be saved.
+  const refund = async (reason: string) => {
     await svc.from("video_credits").insert({
       business_id: businessId,
       delta: cost,
-      reason: `refund:brief_failed:${style}`,
+      reason,
     });
-    return { ok: false, error: error.message };
+  };
+
+  const tagline = input.tagline.trim().slice(0, 140);
+  const details = input.details.trim().slice(0, 500);
+  const prompt = buildPrompt(preset, {
+    business: biz?.name ?? "the business",
+    city: cityName,
+    tagline,
+    details,
+  });
+  const model = FAL_MODELS[style];
+
+  const { data: row, error } = await svc
+    .from("business_videos")
+    .insert({
+      business_id: businessId,
+      url: null,
+      thumbnail_url: photo.url, // the source photo doubles as the poster
+      title: `${biz?.name ?? "Business"} — ${preset.name}`,
+      is_ad: true,
+      status: "pending",
+      source: style,
+      duration_seconds: FAL_DURATIONS[style],
+      credits_spent: cost,
+      brief: {
+        style,
+        preset: presetId,
+        tagline,
+        details,
+        photo_id: photoId,
+        photo_url: photo.url,
+        fal_model: model,
+      },
+    })
+    .select("id, brief")
+    .single();
+  if (error || !row) {
+    await refund(`refund:brief_failed:${style}`);
+    return { ok: false, error: error?.message ?? "Could not queue the spot." };
   }
+
+  // Model-specific inputs (rails: fixed duration/aspect, audio on premium).
+  const falInput: Record<string, unknown> =
+    style === "ai_premium"
+      ? {
+          prompt,
+          image_url: photo.url,
+          duration: "8s",
+          generate_audio: true,
+          resolution: "720p",
+        }
+      : {
+          prompt,
+          image_url: photo.url,
+          duration: "5",
+          negative_prompt: "text, captions, watermark, logo, blurry, distorted",
+        };
+
+  const submit = await falSubmit(model, falInput, row.id);
+  if (!submit.ok) {
+    await svc
+      .from("business_videos")
+      .update({ status: "rejected", rejection_reason: "Production failed to start — credits refunded." })
+      .eq("id", row.id);
+    await refund(`refund:submit_failed:${row.id}`);
+    console.error("[submitAiVideo]", submit.error);
+    return { ok: false, error: "The studio couldn't start this one — your credits were refunded. Try again in a few minutes." };
+  }
+
+  await svc
+    .from("business_videos")
+    .update({ brief: { ...(row.brief as Record<string, unknown>), fal_request_id: submit.requestId } })
+    .eq("id", row.id);
 
   if (biz?.owner_id) {
     void notify({

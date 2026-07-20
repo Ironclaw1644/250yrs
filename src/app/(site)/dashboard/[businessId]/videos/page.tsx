@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { db } from "@/lib/supabase";
 import { getCreditBalance } from "@/lib/actions/videos";
 import { getPhotos } from "@/lib/queries";
+import { falConfigured } from "@/lib/fal";
+import { reconcilePendingVideos } from "@/lib/video-finalize";
 import {
   VideoStudio,
   type StudioVideo,
@@ -16,7 +18,11 @@ export default async function VideosPage({
   params: Promise<{ businessId: string }>;
 }) {
   const { businessId } = await params;
-  const [balance, photos, { data: videos }] = await Promise.all([
+
+  // Self-healing: pick up any renders whose webhook we missed.
+  if (falConfigured) await reconcilePendingVideos(businessId);
+
+  const [balance, photos, { data: videos }, { data: biz }] = await Promise.all([
     getCreditBalance(businessId),
     getPhotos(businessId),
     db()
@@ -26,7 +32,15 @@ export default async function VideosPage({
       )
       .eq("business_id", businessId)
       .order("created_at", { ascending: false }),
+    db()
+      .from("businesses")
+      .select("category:categories(slug)")
+      .eq("id", businessId)
+      .maybeSingle(),
   ]);
+
+  const categorySlug =
+    (biz as { category?: { slug?: string } } | null)?.category?.slug ?? null;
 
   return (
     <VideoStudio
@@ -34,6 +48,8 @@ export default async function VideosPage({
       balance={balance}
       videos={(videos as StudioVideo[]) ?? []}
       photos={(photos as unknown as StudioPhoto[]) ?? []}
+      categorySlug={categorySlug}
+      studioReady={falConfigured}
     />
   );
 }

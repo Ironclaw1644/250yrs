@@ -5,18 +5,16 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/Icon";
 import { CheckoutEmbed } from "@/components/CheckoutEmbed";
+import { AdStudioWizard } from "./AdStudioWizard";
 import {
   createVideoUploadUrl,
   finalizeVideoUpload,
-  submitAiVideo,
   deleteVideo,
 } from "@/lib/actions/videos";
 import {
   CREDIT_PACKS_INFO,
-  STYLE_INFO,
   VIDEO_COSTS,
   formatUsd,
-  type AiStyle,
   type CreditPack,
 } from "@/lib/video-plans";
 
@@ -66,11 +64,15 @@ export function VideoStudio({
   balance,
   videos,
   photos,
+  categorySlug,
+  studioReady,
 }: {
   businessId: string;
   balance: number;
   videos: StudioVideo[];
   photos: StudioPhoto[];
+  categorySlug: string | null;
+  studioReady: boolean;
 }) {
   const router = useRouter();
   const [pack, setPack] = useState<CreditPack | null>(null);
@@ -81,12 +83,6 @@ export function VideoStudio({
   const [uploadPct, setUploadPct] = useState<number | null>(null);
   const [uploadErr, setUploadErr] = useState<string | null>(null);
 
-  // AI brief state
-  const [style, setStyle] = useState<AiStyle>("ai_motion");
-  const [tagline, setTagline] = useState("");
-  const [details, setDetails] = useState("");
-  const [picked, setPicked] = useState<string[]>([]);
-  const [aiErr, setAiErr] = useState<string | null>(null);
   const [pending, start] = useTransition();
 
   async function handleUpload(file: File) {
@@ -138,21 +134,6 @@ export function VideoStudio({
       setUploadPct(null);
     }
   }
-
-  function submitBrief() {
-    setAiErr(null);
-    start(async () => {
-      const res = await submitAiVideo(businessId, style, tagline, details, picked);
-      if (!res.ok) return setAiErr(res.error ?? "Something went wrong.");
-      setMode(null);
-      setTagline("");
-      setDetails("");
-      setPicked([]);
-      router.refresh();
-    });
-  }
-
-  const cost = VIDEO_COSTS[style];
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -365,120 +346,14 @@ export function VideoStudio({
         )}
 
         {mode === "ai" && (
-          <div className="mt-5 space-y-4 rounded-xl bg-linen/60 p-5">
-            <div className="grid gap-3 sm:grid-cols-2">
-              {(Object.keys(STYLE_INFO) as AiStyle[]).map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  onClick={() => setStyle(s)}
-                  className={`rounded-lg border-2 p-3 text-left transition-all duration-std ease-warm ${
-                    style === s ? "border-barn bg-paper-raised" : "border-navy/15 bg-paper-raised/60 hover:border-barn/50"
-                  }`}
-                >
-                  <p className="flex items-center justify-between font-sans font-bold text-navy">
-                    {STYLE_INFO[s].label}
-                    <span className="rounded-full bg-navy px-2 py-0.5 text-[11px] font-bold text-gold">
-                      {VIDEO_COSTS[s]} credit{VIDEO_COSTS[s] === 1 ? "" : "s"}
-                    </span>
-                  </p>
-                  <p className="mt-1 text-xs text-stone">{STYLE_INFO[s].tagline}</p>
-                </button>
-              ))}
-            </div>
-
-            <label className="block">
-              <span className="font-sans text-small font-bold text-navy">Tagline</span>
-              <input
-                value={tagline}
-                onChange={(e) => setTagline(e.target.value)}
-                placeholder='e.g. "The best fried chicken on Main Street since 1998"'
-                maxLength={140}
-                className="mt-1 h-11 w-full rounded-md border-[1.5px] border-navy/15 bg-paper-raised px-3 text-navy placeholder:text-stone/60"
-              />
-            </label>
-            <label className="block">
-              <span className="font-sans text-small font-bold text-navy">
-                What should the spot say about you?
-              </span>
-              <textarea
-                value={details}
-                onChange={(e) => setDetails(e.target.value)}
-                rows={3}
-                maxLength={1000}
-                placeholder="Specialties, history, what makes you the local favorite…"
-                className="mt-1 w-full rounded-md border-[1.5px] border-navy/15 bg-paper-raised px-3 py-2 text-navy placeholder:text-stone/60"
-              />
-            </label>
-
-            {style === "ai_motion" && (
-              <div>
-                <p className="font-sans text-small font-bold text-navy">
-                  Pick photos for the spot{" "}
-                  <span className="font-normal text-stone">({picked.length} selected)</span>
-                </p>
-                {photos.length === 0 ? (
-                  <p className="mt-1 text-small text-stone">
-                    Add photos in the Photos tab first — Motion spots are built from them.
-                  </p>
-                ) : (
-                  <div className="mt-2 grid grid-cols-4 gap-2 sm:grid-cols-6">
-                    {photos.map((p) => {
-                      const on = picked.includes(p.id);
-                      return (
-                        <button
-                          key={p.id}
-                          type="button"
-                          onClick={() =>
-                            setPicked((prev) =>
-                              on ? prev.filter((x) => x !== p.id) : [...prev, p.id].slice(0, 8),
-                            )
-                          }
-                          className={`relative aspect-square overflow-hidden rounded-lg border-2 transition-all ${
-                            on ? "border-gold ring-2 ring-gold/50" : "border-transparent opacity-80 hover:opacity-100"
-                          }`}
-                        >
-                          <Image
-                            src={p.url}
-                            alt={p.alt_text ?? ""}
-                            fill
-                            sizes="120px"
-                            className="object-cover"
-                          />
-                          {on && (
-                            <span className="absolute right-1 top-1 grid h-5 w-5 place-items-center rounded-full bg-gold text-navy-deep">
-                              <Icon name="check" className="text-[10px]" />
-                            </span>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {aiErr && <p className="text-small text-barn">{aiErr}</p>}
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-small text-stone">
-                Costs <strong className="text-navy">{cost} credit{cost === 1 ? "" : "s"}</strong> —
-                you have <strong className="text-navy">{balance}</strong>.
-              </p>
-              <button
-                type="button"
-                disabled={pending || balance < cost}
-                onClick={submitBrief}
-                className="btn btn-primary disabled:opacity-60"
-              >
-                <Icon name="wand-magic-sparkles" />
-                {pending ? "Sending to the studio…" : "Start production"}
-              </button>
-            </div>
-            {balance < cost && (
-              <p className="text-xs text-barn">
-                Not enough credits — grab a pack at the top of this page first.
-              </p>
-            )}
+          <div className="mt-5">
+            <AdStudioWizard
+              businessId={businessId}
+              photos={photos}
+              categorySlug={categorySlug}
+              balance={balance}
+              studioReady={studioReady}
+            />
           </div>
         )}
       </section>

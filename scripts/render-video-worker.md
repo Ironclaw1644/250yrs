@@ -1,67 +1,48 @@
-# TV-Spot Render Worker — contract (NOT implemented yet)
+# TV-Spot rendering — how it works now (fal.ai, in-app)
 
-The site never calls a video-generation API. Owners buy credits, submit a
-production brief (`taw.business_videos` row, `status='pending'`,
-`source='ai_motion'|'ai_premium'`, inputs in `brief` jsonb), and this worker —
-run out-of-band, when the business decides to turn it on — renders the video
-and flips the row to ready. This keeps generation costs at exactly $0 until
-the client opts in.
+The original out-of-band worker contract is retired: rendering is fully
+in-app and serverless as of the Ad Studio build.
 
-## Poll loop
+## Pipeline
 
-```sql
-select id, business_id, source, brief
-from taw.business_videos
-where status = 'pending' and source like 'ai_%' and url is null
-order by created_at
-limit 1;
-```
+1. Owner completes the Ad Studio wizard (`AdStudioWizard`): preset → one
+   photo → tagline → tier. No free-form prompts exist anywhere.
+2. `submitAiVideo` (src/lib/actions/videos.ts): ownership + daily cap (3/day
+   per business) → atomic credit debit → inserts the `business_videos` row
+   (`status='pending'`, `thumbnail_url` = source photo, brief carries preset/
+   prompt vars/fal model) → submits to the fal queue with our webhook URL
+   attached. Submit failure ⇒ auto-refund + rejected row.
+3. fal renders (2–5 min) and POSTs `/api/webhooks/fal?token=…&video=…`.
+4. `finalizeAiVideo` (src/lib/video-finalize.ts): re-fetches the result from
+   fal's API (never trusts the webhook body), downloads the mp4 into
+   `taw-media/business/{id}/videos/gen-{videoId}.mp4`, sets `url`, and leaves
+   `status='pending'` so the spot lands in the existing `/admin/videos`
+   approval queue. Owner + admin notified. FAILED renders ⇒ rejected +
+   credits refunded + owner notified.
+5. Missed webhooks self-heal: the owner's TV Ads page runs
+   `reconcilePendingVideos` on load for pending rows older than 2 minutes.
 
-Use the service key (`SUPABASE_SECRET_KEY`), schema `taw`. Guard the whole
-worker behind `VIDEO_WORKER_ENABLED=1` so it can never run by accident.
+## Models & knobs (env-overridable, see src/lib/fal.ts)
 
-## Tier 1 — Motion (`ai_motion`, 1 credit, ~$0 marginal cost)
+| Tier | Credits | Default model | Length |
+|---|---|---|---|
+| Motion | 1 | `fal-ai/kling-video/v2.1/standard/image-to-video` | 5s, silent |
+| Premium | 3 | `fal-ai/veo3/fast/image-to-video` | 8s, with audio |
 
-1. Fetch the photos in `brief.photo_ids` from `taw.business_photos`.
-2. Render a 20–30s slideshow: Ken Burns zoom/pan per photo (ffmpeg `zoompan`
-   or Remotion), crossfades, navy/gold lower-third with the business name +
-   `brief.tagline`, closing card with the site URL. Royalty-free bed track.
-3. Encode: H.264 MP4, 1280×720, ~24fps, target ≤ 15MB. Extract a poster JPEG
-   from ~2s in.
+Override with `FAL_MODEL_MOTION` / `FAL_MODEL_PREMIUM`.
 
-## Tier 2 — Premium (`ai_premium`, 3 credits, ~$6–12 COGS)
+## Env
 
-1. Build a prompt from `brief.details` + `brief.tagline` + the business
-   category/city (query `businesses`).
-2. Veo 3.1 via `GOOGLE_API_KEY` (precedent: `scripts/generate-images-gemini.mjs`
-   uses the same key family). Generate 2–4 8s clips, stitch to 15–30s with the
-   same branded lower-third + end card as Tier 1.
-3. Same encode/poster step.
+- `FAL_KEY` — fal.ai API key. Absent ⇒ studio shows "warming up", nothing
+  can be submitted, no credits at risk.
+- `FAL_WEBHOOK_TOKEN` — random secret baked into the webhook URL.
 
-## Publish (both tiers)
+## Activation checklist for a new key
 
-1. Upload to storage: `business/{business_id}/videos/gen-{video_id}.mp4` and
-   `.../gen-{video_id}-poster.jpg` in the public `taw-media` bucket.
-2. Update the row: `url`, `thumbnail_url`, `duration_seconds`,
-   `status = 'ready'` — or leave `pending` and let an admin approve via
-   `/admin/videos` if human review of AI output is wanted (recommended at
-   first: set `status='pending'` + `url` filled; the admin Approve button
-   already handles exactly this state).
-3. Insert a `taw.notifications` row for `businesses.owner_id`
-   (`type='video_status'`, href `/dashboard/{business_id}/videos`) — or POST
-   the site's notify helper if running inside the app.
-
-## Failure policy
-
-On unrecoverable render failure: set `status='rejected'`,
-`rejection_reason='Production failed — credits refunded.'`, and insert a
-`taw.video_credits` refund row (`delta = credits_spent`,
-`reason = 'refund:render_failed:{video_id}'`). Never leave a brief pending
-forever.
-
-## Cost guardrails
-
-- Per-business cap: refuse more than N premium renders/day (start N=3).
-- Global monthly budget env (`VIDEO_WORKER_MONTHLY_BUDGET_USD`); stop when hit.
-- Always render Motion locally first to validate the pipeline before enabling
-  Veo spending.
+1. Paste `FAL_KEY=` into `.env.local`.
+2. Verify: `curl -s -o /dev/null -w "%{http_code}" -X POST
+   https://queue.fal.run/fal-ai/flux/schnell -H "Authorization: Key $FAL_KEY"
+   -H "Content-Type: application/json" -d '{}'` → **422** means the key is
+   live (401 = dead).
+3. Probe the two tier models the same way (422 = model id valid).
+4. Push `FAL_KEY` to Vercel production + redeploy.
