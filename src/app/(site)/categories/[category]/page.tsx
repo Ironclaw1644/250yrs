@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!c) return { title: "Not found" };
   return {
     title: `${c.name} Near You`,
-    description: `Find local ${c.name.toLowerCase()} across the U.S. and beyond — hours, photos, prices, reviews, and directions.`,
+    description: `Find ${c.name.toLowerCase()} near you across the U.S. and beyond — hours, photos, prices, reviews, and directions.`,
     alternates: { canonical: `/categories/${c.slug}` },
   };
 }
