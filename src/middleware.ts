@@ -5,7 +5,7 @@ import { createServerClient } from "@supabase/ssr";
  * Site-wide payment hold. Flip to false (and redeploy) to bring the real
  * site back instantly — nothing else in this file or the app changes.
  */
-const PAYMENT_HOLD_ACTIVE = true;
+const PAYMENT_HOLD_ACTIVE = false;
 const HOLD_BYPASS_PREFIXES = ["/site-paused", "/api", "/_next", "/brand"];
 const HOLD_BYPASS_EXACT = ["/favicon.ico", "/robots.txt", "/sitemap.xml"];
 
