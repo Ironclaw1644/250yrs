@@ -46,7 +46,7 @@ export default async function CategoryLanding({ params }: Params) {
           <p className="eyebrow">Category</p>
           <h1 className="font-heading text-h1 text-navy">{c.name}</h1>
           <p className="mt-1 max-w-2xl text-stone">
-            {brandCat?.blurb}. Pick a city to see local {c.name.toLowerCase()}.
+            {brandCat?.blurb}. Pick a city to see {c.name.toLowerCase()} near you.
           </p>
         </div>
       </header>

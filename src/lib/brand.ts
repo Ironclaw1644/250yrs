@@ -38,6 +38,7 @@ export const CATEGORIES: Category[] = [
   { name: "Bakeries", slug: "bakeries", icon: "bread-slice", blurb: "Fresh bread, cakes & sweets" },
   { name: "Nightclubs", slug: "nightclubs", icon: "champagne-glasses", blurb: "Live music, dancing & late nights" },
   { name: "Local & Mom-and-Pop", slug: "local-shops", icon: "store", blurb: "The shops that make a town" },
+  { name: "Local Businesses", slug: "local-businesses", icon: "building", blurb: "Every kind of independent business" },
 ];
 
 export const CATEGORY_BY_SLUG: Record<string, Category> = Object.fromEntries(

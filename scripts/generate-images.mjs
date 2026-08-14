@@ -62,6 +62,7 @@ const CATEGORY_PROMPTS = {
   "beauty-supply": "neatly stocked beauty supply shelves with hair products in warm light",
   bakeries: "crusty artisan loaves and a frosted layer cake on a bakery counter",
   "local-shops": "charming mom-and-pop porch-front general store with an awning at golden hour",
+  "local-businesses": "row of varied independent small-business storefronts along a main street, welcoming and diverse",
 };
 
 const ASSETS = [

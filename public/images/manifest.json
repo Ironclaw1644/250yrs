@@ -163,5 +163,40 @@
     "group": "demo",
     "name": "fade-factory-berea-2",
     "path": "/images/demo/fade-factory-berea-2.webp"
+  },
+  {
+    "group": "demo",
+    "name": "fade-factory-berea-3",
+    "path": "/images/demo/fade-factory-berea-3.webp"
+  },
+  {
+    "group": "demo",
+    "name": "dons-tire-service-berea-1",
+    "path": "/images/demo/dons-tire-service-berea-1.webp"
+  },
+  {
+    "group": "demo",
+    "name": "dons-tire-service-berea-2",
+    "path": "/images/demo/dons-tire-service-berea-2.webp"
+  },
+  {
+    "group": "demo",
+    "name": "dons-tire-service-berea-3",
+    "path": "/images/demo/dons-tire-service-berea-3.webp"
+  },
+  {
+    "group": "demo",
+    "name": "kingston-kutz-jm-1",
+    "path": "/images/demo/kingston-kutz-jm-1.webp"
+  },
+  {
+    "group": "demo",
+    "name": "kingston-kutz-jm-2",
+    "path": "/images/demo/kingston-kutz-jm-2.webp"
+  },
+  {
+    "group": "demo",
+    "name": "kingston-kutz-jm-3",
+    "path": "/images/demo/kingston-kutz-jm-3.webp"
   }
 ]
